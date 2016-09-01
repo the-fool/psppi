@@ -123,3 +123,4 @@ psppi/media/
 # Hitch directory
 tests/.hitch
 
+.vscode
