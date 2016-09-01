@@ -1,7 +1,7 @@
 /*
  * Angular 2 decorators and services
  */
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
 
 import { AppState } from './app.service';
 
@@ -57,6 +57,23 @@ import { AppState } from './app.service';
       </div>
     </footer>
     <alert dismissOnTimeout="3000">This alert will dismiss in 3s</alert>
+    <button class="btn btn-primary" (click)="lgModal.show()">Large modal</button>
+ 
+    <div bsModal (onHide)="hide($event)" (onHidden)="hidden($event)" #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" (click)="lgModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Large modal</h4>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+        </div>
+      </div>
+    </div>
   `
 })
 export class App {
@@ -65,10 +82,17 @@ export class App {
   url = 'https://twitter.com/AngularClass';
 
   constructor(
-    public appState: AppState) {
+    public appState: AppState,
+    public viewContainerRef: ViewContainerRef) {
 
   }
+  hide(e) {
+    console.log('hide', e);
+  }
 
+  hidden(e) {
+    console.log('hidden', e);
+  }
   ngOnInit() {
     console.log('Initial App State', this.appState.state);
   }
