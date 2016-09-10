@@ -52,3 +52,4 @@ redis>=2.10.0
 django-filter==0.14.0
 django-rest-auth==0.8.1
 djangorestframework==3.4.4
+pandas==0.18.1
