@@ -1,4 +1,9 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib/",
-  "python.pythonPath": "/home/thomas/Envs/psppi/bin/python"
+  "python.pythonPath": "/home/thomas/Envs/psppi/bin/python",
+  "python.autoComplete.extraPaths": [
+    "/home/thomas/Envs/psppi/bin/python"
+  ],
+  "python.linting.pep8Enabled": true
+
 }
