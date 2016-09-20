@@ -13,6 +13,10 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const HtmlElementsPlugin = require('./html-elements-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+var ENV = process.env.npm_lifecycle_event;
+var isTest = ENV === 'test' || ENV === 'test-watch';
+var isProd = ENV === 'build';
 
 /*
  * Webpack Constants
@@ -72,7 +76,7 @@ module.exports = {
      *
      * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
      */
-    extensions: ['', '.ts', '.js', '.json'],
+    extensions: ['', '.ts', '.js', '.json', '.scss'],
 
     // Make sure root is client
     root: helpers.root('client'),
