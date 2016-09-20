@@ -20,7 +20,9 @@ import '@angularclass/hmr';
 // RxJS
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
+
 require('bootstrap-loader');
+
 if ('production' === ENV) {
   // Production
 } else {

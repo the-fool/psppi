@@ -18,7 +18,7 @@ const HtmlElementsPlugin = require('./html-elements-plugin');
  * Webpack Constants
  */
 const METADATA = {
-  title: 'Angular2 Webpack Starter by @gdi2290 from @AngularClass',
+  title: 'PSPPI',
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer()
 };
@@ -144,6 +144,16 @@ module.exports = {
         test: /\.json$/,
         loader: 'json-loader'
       },
+       // support for .scss files
+      // use 'null' loader in test mode (https://github.com/webpack/null-loader)
+      // all css in client/style will be bundled in an external css file
+      {
+        test: /\.scss$/,
+        exclude: helpers.root('client', 'app'),
+        loader: isTest ? 'null' : ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass')
+      },
+      // all css required in client/app files will be merged in js files
+      {test: /\.scss$/, exclude: helpers.root('client', 'style'), loader: 'raw!postcss!sass'},
 
       /*
        * to string and css loader support for *.css files
