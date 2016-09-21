@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { provideStore, combineReducers } from '@ngrx/store';
+
+import SharedModule from './shared/shared.module';
+
+import { ExploreComponent } from './explore';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -25,11 +27,11 @@ const APP_PROVIDERS = [
   bootstrap: [ App ],
   declarations: [
     App,
+    ExploreComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
-    FormsModule,
-    HttpModule,
+    SharedModule,
     RouterModule.forRoot(ROUTES, { useHash: true })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
