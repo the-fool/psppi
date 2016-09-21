@@ -32,7 +32,7 @@ const APP_PROVIDERS = [
   imports: [ // import Angular's modules
     BrowserModule,
     SharedModule,
-    RouterModule.forRoot(ROUTES, { useHash: true })
+    RouterModule.forRoot(ROUTES, { useHash: false })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
