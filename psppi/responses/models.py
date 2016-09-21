@@ -1,6 +1,6 @@
 from django.db import models
 from psppi.questions.models import Question
-from django.contrib.postgres.fields import HStoreField
+from django.contrib.postgres.fields import HStoreField, JSONField
 
 
 class Demography(models.Model):
@@ -13,9 +13,4 @@ class Response(models.Model):
     year = models.IntegerField(default=0)
     question = models.ForeignKey(Question, null=True)
     value = models.IntegerField(default=-1)
-
-
-class Demographic(models.Model):
-    response = models.ForeignKey(Response, null=True)
-    nature = models.ForeignKey(Demography, null=True)
-    value = models.IntegerField(default=0)
+    demographics = JSONField(default={})
