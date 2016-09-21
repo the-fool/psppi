@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from psppi.columns.models import Column
+from psppi.questions.models import Question, Group
 import pandas as pd
 
 
