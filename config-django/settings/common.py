@@ -46,7 +46,7 @@ LOCAL_APPS = (
     # custom users app
     'psppi.users.apps.UsersConfig',
     'psppi.responses',
-    'psppi.columns'
+    'psppi.questions'
     # Your stuff: custom apps go here
 )
 
