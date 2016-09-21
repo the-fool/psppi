@@ -27,7 +27,7 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django.contrib.postgres',
     # Useful template tags:
     # 'django.contrib.humanize',
 
@@ -67,9 +67,7 @@ MIDDLEWARE_CLASSES = (
 
 # MIGRATIONS CONFIGURATION
 # ------------------------------------------------------------------------------
-MIGRATION_MODULES = {
-    'sites': 'psppi.contrib.sites.migrations'
-}
+
 
 # DEBUG
 # ------------------------------------------------------------------------------

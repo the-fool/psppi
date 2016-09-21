@@ -13,7 +13,8 @@ class Command(BaseCommand):
             for _, row in df.iterrows():
                 values = {}
                 for i in range(10):
-                    if not pd.isnull(row[str(i)]): values[i] = row[str(i)]
+                    j = str(i)
+                    if not pd.isnull(row[j]): values[j] = row[j]
                 print(values)
                 demographics.append(
                     Demography(
