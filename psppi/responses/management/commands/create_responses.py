@@ -44,7 +44,6 @@ class Command(BaseCommand):
                         if pd.isnull(row[col]) or not type(row[col]) is int:
                             print('BAD VAL :: {0} - {1} : col {2} : val {3}, type: {4}\n'.format(
                                 dataset, _, col, str(row[col]), type(row[col])))
-
                             continue
                         responses.append(
                             Response(
