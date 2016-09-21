@@ -1,5 +1,6 @@
 from .models import Question
 from rest_framework import serializers
+from psppi.responses.serializers import ResponseCompactSerializer
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -11,6 +12,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class QuestionDetailSerializer(serializers.ModelSerializer):
     group = serializers.StringRelatedField()
+    responses = ResponseCompactSerializer(many=True)
 
     class Meta:
         model = Question

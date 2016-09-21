@@ -11,6 +11,6 @@ class Demography(models.Model):
 
 class Response(models.Model):
     year = models.IntegerField(default=0)
-    question = models.ForeignKey(Question, null=True)
+    question = models.ForeignKey(Question, null=True, related_name='responses')
     value = models.IntegerField(default=-1)
     demographics = JSONField(default={})
