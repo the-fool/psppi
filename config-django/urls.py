@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 api_patterns = [
-    url(r'^questions/', include('psppi.questions.urls', namespace='questions'))
+    url(r'^questions/', include('psppi.questions.urls', namespace='questions')),
+    url(r'^demography/', include('psppi.responses.urls-demography', namespace='demography'))
 ]
 
 urlpatterns = [

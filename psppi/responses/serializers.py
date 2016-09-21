@@ -1,5 +1,11 @@
-from .models import Response
+from .models import Response, Demography
 from rest_framework import serializers
+
+
+class DemographySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Demography
+        fields = ('code', 'text', 'values')
 
 
 class ResponseCompactSerializer(serializers.ModelSerializer):

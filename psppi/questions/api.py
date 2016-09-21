@@ -52,7 +52,7 @@ class QuestionDetailView(generics.RetrieveAPIView):
             grouped_responses[r['year']].append({
                 'count': r['value__count'],
                 'value': str(r['value']),  # strings to accomodate JSON
-                'demog': r.get('demog', -1)  # -1 indicates 'any' demography  
+                'demog': str(r.get('demog', -1))  # -1 indicates 'any' demography  
             })
         question['responses'] = grouped_responses
 

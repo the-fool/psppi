@@ -21,5 +21,5 @@ interface IQuestionData extends IQuestion {
 interface IResponse {
     count: number,
     value: string,
-    demog: number
+    demog: string
 }
