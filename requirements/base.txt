@@ -27,6 +27,8 @@ Pillow==3.3.1
 # Well-built with regular release cycles!
 django-allauth==0.27.0
 
+# CORS middleware
+django-cors-headers==1.1.0
 
 # Python-PostgreSQL Database Adapter
 psycopg2==2.6.2

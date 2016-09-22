@@ -1,8 +1,5 @@
-import { Routes, RouterModule } from '@angular/router';
-
-import { ROUTES as ExploreRoutes } from './explore';
+import { Routes } from '@angular/router';
 
 export const ROUTES: Routes = [
-  ...ExploreRoutes,
   { path: '**',    redirectTo: '/explore' },
 ];

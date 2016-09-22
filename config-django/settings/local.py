@@ -14,6 +14,7 @@ from .common import *  # noqa
 import socket
 import os
 
+ALLOWED_HOSTS = ['127.0.0.1:3000', 'localhost:3000']
 # DEBUG
 # ------------------------------------------------------------------------------
 DEBUG = env.bool('DJANGO_DEBUG', default=True)
