@@ -23,9 +23,10 @@ export class ExploreDemogGuard implements Resolve<any> {
     state: RouterStateSnapshot
   ): Promise<boolean> | Observable<boolean> | boolean {
     const demog = route.params['demog'];
+    const year = route.params['year'];
     if (demog === 'any') { return true; }
-    if (!demog) {
-      this.router.navigate(['/explore/any']);
+    if (!demog || !year) {
+      this.router.navigate(['/explore', 'any', 'all']);
       return false;
     }
     return this.store
@@ -36,7 +37,7 @@ export class ExploreDemogGuard implements Resolve<any> {
       .map(flag => {
         if (!flag) {
           console.log('illegal demog');
-          this.router.navigate(['/explore/any']);
+          this.router.navigate(['/explore', 'any', year]);
           return false;
         } else {
           return true;

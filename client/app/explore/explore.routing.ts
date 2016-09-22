@@ -4,16 +4,11 @@ import { ExploreResolver } from './explore.resolver';
 import { ExploreDemogGuard } from './explore-demog.guard';
 export const ROUTES: Routes = [
     {
-        path: 'explore',
+        path: 'explore/:demog/:year',
+        component: ExploreComponent,
         resolve: {
-            initialData: ExploreResolver
+            initialData: ExploreResolver,
+            guard: ExploreDemogGuard
         },
-        children: [
-            {
-                path: ':demog',
-                component: ExploreComponent,
-                resolve: {guard: ExploreDemogGuard}
-            }
-        ]
     }
 ];
