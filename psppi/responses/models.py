@@ -6,6 +6,7 @@ from django.contrib.postgres.fields import HStoreField, JSONField
 class Demography(models.Model):
     code = models.CharField(unique=True, max_length=128)
     text = models.CharField(default='', max_length=512)
+    nice = models.CharField(default='', max_length=128)
     values = HStoreField(default={})
 
 

@@ -20,6 +20,7 @@ class Command(BaseCommand):
                     Demography(
                         code=row['code'],
                         text=row['text'],
+                        nice=row['nice'],
                         values=values
                     )
                 )
