@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { provideStore, combineReducers } from '@ngrx/store';
+
 import CoreModule from './core/core.module';
 import SharedModule from './shared/shared.module';
 import ExploreModule  from './explore/explore.module';
