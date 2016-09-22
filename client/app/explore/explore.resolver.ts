@@ -7,6 +7,7 @@ import { setDemography, setQuestions } from '../core/reducers';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/do';
+
 @Injectable()
 export class ExploreResolver implements Resolve<any> {
     private apiUrl = 'http://127.0.0.1:8000/api/v1';
@@ -18,10 +19,7 @@ export class ExploreResolver implements Resolve<any> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         const batch = [];
         ['questions', 'demography'].forEach(url =>
-            batch.push(
-                this.api.request('get', `${url}/`)
-                  .then(res => console.log(res))
-            )
+            batch.push(this.api.request('get', `${url}/`))
         );
 
         return Observable.forkJoin(batch).do(ar => {
