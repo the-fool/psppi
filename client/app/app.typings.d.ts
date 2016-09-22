@@ -1,7 +1,7 @@
 interface AppState {
     data: IQuestionData[],
     questions: {[group: string]: IQuestion[]},
-    demography: string[]
+    demography: IDemography[]
 }
 
 interface IQuestion {
@@ -22,4 +22,10 @@ interface IResponse {
     count: number,
     value: string,
     demog: string
+}
+
+interface IDemography {
+    code: string,
+    text: string,
+    values: {[key: string]: string}
 }
