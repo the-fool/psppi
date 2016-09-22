@@ -1,14 +1,21 @@
 import { Routes } from '@angular/router';
 import { ExploreComponent } from './explore.component';
-import { ExploreResolver } from './explore.resolver';
+import { InitialData, QuestionData } from './explore.resolvers';
 import { ExploreDemogGuard } from './explore-demog.guard';
 export const ROUTES: Routes = [
     {
-        path: 'explore/:demog/:year',
-        component: ExploreComponent,
+        path: 'explore',
         resolve: {
-            initialData: ExploreResolver,
-            guard: ExploreDemogGuard
+            iniialData: InitialData,
         },
+        children: [
+            {
+                path: ':question',
+                component: ExploreComponent,
+                resolve: {
+                    questionData: QuestionData
+                }
+            }
+        ]
     }
 ];

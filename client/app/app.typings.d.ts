@@ -27,5 +27,6 @@ interface IResponse {
 interface IDemography {
     code: string,
     text: string,
+    nice: string,
     values: {[key: string]: string}
 }
