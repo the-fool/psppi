@@ -10,7 +10,7 @@ import { compose, map, toPairs, prop, keys } from 'ramda';
     </demography-selector>
     <year-selector [years]="yearOptions$ | async">
     </year-selector>
-    <question-selector [questions]="questionOptions$ | async"
+    <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
         (onSelectQuestion)="onSelectQuestion($event)">
     </question-selector>
     `
@@ -18,13 +18,15 @@ import { compose, map, toPairs, prop, keys } from 'ramda';
 export class ExploreComponent {
     private demography$: Observable<IDemography[]>;
     private yearOptions$: Observable<string[]>;
+    private initSelectedQuestion$: Observable<IQuestion>;
     private questionOptions$: Observable<SelectChildrenItem[]>;
     constructor(
         private route: ActivatedRoute,
         private store: Store<AppState>,
         private router: Router
     ) {
-        const selectedQuestion$ = route.data.map(d => d['questionData']).do(console.log);
+        const selectedQuestion$ = route.data.map(d => d['questionData']);
+        this.initSelectedQuestion$ = selectedQuestion$.map(q => ([{id: q['id'], text: q['text']}])).take(1);
         this.yearOptions$ = selectedQuestion$.map(compose(keys, prop('responses')));
         this.demography$ = store.select(s => s.demography);
         this.questionOptions$ = store.select(s => s.questions).map(qs => {
