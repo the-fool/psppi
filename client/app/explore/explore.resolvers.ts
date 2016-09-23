@@ -46,12 +46,11 @@ export class QuestionData implements Resolve<any> {
             .map(groupedQs => flatten(values(groupedQs)))
             .switchMap(qs => {
                 const flag = !!find(propEq('id', qID), qs);
-                console.log(qID, qs, flag);
                 if (!flag) {
                     this.router.navigate([`/explore/${qs[0].id}`]);
                     return Observable.of(false);
                 } else {
-                    return this.api.request('get', `questions/${qID}`);   // TODO
+                    return this.api.request('get', `questions/${qID}`);
                 }
             });
     }
