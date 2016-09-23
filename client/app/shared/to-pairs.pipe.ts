@@ -3,7 +3,7 @@ import { toPairs } from 'ramda';
 
 @Pipe({name: 'toPairs'})
 export class ToPairsPipe implements PipeTransform {
-    transform(value: {}): [[any]] {
+    transform(value: {}): [{}, {}][] {
         return toPairs(value);
     }
 }

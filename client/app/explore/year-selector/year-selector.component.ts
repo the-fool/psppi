@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: 'year-selectors',
+    selector: 'year-selector',
     template: `
     <div class="btn-group-vertical">
     <button *ngFor="let year of years" type="button" 
@@ -12,7 +12,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     `
 })
 export class YearSelectorComponent {
-    @Input() years: number[];
+    @Input() years: string[];
     @Output() selectYear = new EventEmitter<string>();
-
 }

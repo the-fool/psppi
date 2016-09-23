@@ -20,6 +20,7 @@ import { ROUTES } from './explore.routing';
     ],
     declarations: [
         DemographySelectorComponent,
+        YearSelectorComponent,
         ExploreComponent
     ]
 })
