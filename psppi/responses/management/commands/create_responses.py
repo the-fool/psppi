@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from psppi.questions.models import Question
-from psppi.responses.models import Response, Demography
+from psppi.responses.models import Response, Demography, AvailableDemographyByQuestion
 import pandas as pd
 import os
 
@@ -15,14 +15,17 @@ class Command(BaseCommand):
         Response.objects.all().delete()
         responses = []
 
-        # Get hash dict of question objects
+        # Get hash dict of question & demography objects
         questions = {}
         for q in Question.objects.all():
             questions[q.code] = q
 
-        # Get list of possible demographies
-        demographics = [d.code for d in Demography.objects.all()]
+        demographies = {}
+        for d in Demography.objects.all():
+            demographies[d.code] = d
+
         responses = []
+        available_demog_by_question = set()  # (demog, question, year)
         for dataset in os.listdir('./data/datasets'):
             if not dataset.endswith('.csv'):
                 continue
@@ -35,7 +38,7 @@ class Command(BaseCommand):
 
                 # get relevant columns for this table
                 cols = [c for c in df.keys() if c in questions.keys()]
-                demogs = [d for d in df.keys() if d in demographics]
+                demogs = [d for d in df.keys() if d in demographies.keys()]
                 print("-------\n{0}\n-------\n\nQuestions:\n{1}\n\nDemographics:\n{2}\n\n".format(dataset, cols, demogs))
 
                 # go through the rows creating responses
@@ -53,4 +56,13 @@ class Command(BaseCommand):
                                 demographics={demog: row[demog] for demog in demogs if not pd.isnull(row[demog])}
                             )
                         )
+                        for demog in demogs:
+                            available_demog_by_question.add((demog, col, year))
         Response.objects.bulk_create(responses)
+        AvailableDemographyByQuestion.objects.bulk_create([
+            AvailableDemographyByQuestion(
+                demography=demographies[dbq[0]],
+                question=questions[dbq[1]],
+                year=dbq[2]
+            ) for dbq in available_demog_by_question])
+

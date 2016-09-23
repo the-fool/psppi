@@ -15,3 +15,12 @@ class Response(models.Model):
     question = models.ForeignKey(Question, null=True, related_name='responses')
     value = models.IntegerField(default=-1)
     demographics = JSONField(default={})
+
+
+class AvailableDemographyByQuestion(models.Model):
+    year = models.IntegerField(default=0)
+    demography = models.ForeignKey(Demography, null=True)
+    question = models.ForeignKey(Question, null=True)
+
+    class Meta:
+        unique_together = ('year', 'demography', 'question')

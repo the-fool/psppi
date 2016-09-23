@@ -42,7 +42,7 @@ export class ExploreComponent {
         this.demographyOptions$ = Observable.combineLatest(
             store.select(s => s.demography),
             selectedQuestion$,
-            (d, q) => ([{code: '', text: '', active: true, disabled: false}])
+            (d, q, s) => ([{code: '', text: '', active: true, disabled: false}])
         );
     }
 
