@@ -5,12 +5,13 @@ import { Store } from '@ngrx/store';
 @Component({
     template: `
     <h1>Explore the Data!</h1>
-    <demography-selectors [allDemogs]="demography$ | async"></demography-selectors>
+    <demography-selector [allDemogs]="demography$ | async"></demography-selector>
     `
 })
 export class ExploreComponent {
     private demography$: Observable<IDemography[]>;
     private groupedQuestions$: Observable< {[group: string]: IQuestion[]}>;
+    private yearSelections$: Observable<number>[];
     constructor(
         private route: ActivatedRoute,
         private store: Store<AppState>

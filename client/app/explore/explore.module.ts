@@ -5,8 +5,8 @@ import { InitialData, QuestionData } from './explore.resolvers';
 import { ExploreDemogGuard } from './explore-demog.guard';
 import { ExploreComponent } from './explore.component';
 
-import { DemographyComponent } from './demography/demography.component';
-
+import { DemographySelectorComponent } from './demography-selector/demography-selector.component';
+import { YearSelectorComponent } from './year-selector/year-selector.component';
 import { ROUTES } from './explore.routing';
 @NgModule({
     imports: [
@@ -19,7 +19,7 @@ import { ROUTES } from './explore.routing';
         ExploreDemogGuard
     ],
     declarations: [
-        DemographyComponent,
+        DemographySelectorComponent,
         ExploreComponent
     ]
 })

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: 'demography-selectors',
+    selector: 'demography-selector',
     template: `
     <div class="btn-group-vertical">
     <button *ngFor="let d of allDemogs" type="button" 
@@ -11,7 +11,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     </div>
     `
 })
-export class DemographyComponent {
+export class DemographySelectorComponent {
     @Input() allDemogs: IDemography[];
     @Input() employableDemogs: number[]; // list of keys
     @Output() selectDemog = new EventEmitter<string>();
