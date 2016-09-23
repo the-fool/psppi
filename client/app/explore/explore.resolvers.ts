@@ -51,7 +51,7 @@ export class QuestionData implements Resolve<any> {
                     this.router.navigate([`/explore/${qs[0].id}`]);
                     return Observable.of(false);
                 } else {
-                    return Observable.of(true);   // TODO
+                    return this.api.request('get', `questions/${qID}`);   // TODO
                 }
             });
     }

@@ -6,10 +6,6 @@ import { Component, Input, OnChanges } from '@angular/core';
         <ul>
             <li *ngFor="let d of allDemogs">
             <p>{{d.nice}}</p>
-            <div class="btn-group">
-                <label class="btn btn-primary" *ngFor="let kv of (d.values | toPairs)"
-                    btnCheckbox>{{kv[1]}}</label>
-            </div>
             </li>
         </ul>
     `
