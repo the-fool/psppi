@@ -17,6 +17,6 @@ export class ExploreComponent {
     ) {
         this.demography$ = store.select(s => s.demography);
         this.groupedQuestions$ = store.select(s => s.questions);
-        route.data.subscribe(d => console.log(d))
+        route.data.subscribe(d => console.log(d));
     }
 }
