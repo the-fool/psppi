@@ -35,3 +35,10 @@ interface SelectChildrenItem {
     text: string;
     children: {id: number|string, text: string}[]
 }
+
+interface IDemographySelectItem {
+    disabled: boolean,
+    active: boolean,
+    text: string,
+    code: string,
+}

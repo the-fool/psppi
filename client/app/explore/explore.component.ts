@@ -17,8 +17,9 @@ import { compose, map, toPairs, prop, keys } from 'ramda';
 })
 export class ExploreComponent {
     private demography$: Observable<IDemography[]>;
+    private demographyOptions$: Observable<IDemographySelectItem[]>;
     private yearOptions$: Observable<string[]>;
-    private initSelectedQuestion$: Observable<IQuestion>;
+    private initSelectedQuestion$: Observable<IQuestion[]>;
     private questionOptions$: Observable<SelectChildrenItem[]>;
     constructor(
         private route: ActivatedRoute,
@@ -26,7 +27,9 @@ export class ExploreComponent {
         private router: Router
     ) {
         const selectedQuestion$ = route.data.map(d => d['questionData']);
-        this.initSelectedQuestion$ = selectedQuestion$.map(q => ([{id: q['id'], text: q['text']}])).take(1);
+
+        // for some reason, ng2-select wants an array
+        this.initSelectedQuestion$ = selectedQuestion$.map(Array).take(1);
         this.yearOptions$ = selectedQuestion$.map(compose(keys, prop('responses')));
         this.demography$ = store.select(s => s.demography);
         this.questionOptions$ = store.select(s => s.questions).map(qs => {
@@ -36,6 +39,11 @@ export class ExploreComponent {
                 ({text: grp[0], children: map(child, grp[1])});
             return map(parent, toPairs(qs));
         });
+        this.demographyOptions$ = Observable.combineLatest(
+            store.select(s => s.demography),
+            selectedQuestion$,
+            (d, q) => ([{code: '', text: '', active: true, disabled: false}])
+        );
     }
 
     onSelectQuestion({id, text}) {
