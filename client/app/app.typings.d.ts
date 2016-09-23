@@ -30,3 +30,8 @@ interface IDemography {
     nice: string,
     values: {[key: string]: string}
 }
+
+interface SelectChildrenItem {
+    text: string;
+    children: {id: number|string, text: string}[]
+}
