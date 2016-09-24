@@ -17,7 +17,7 @@ interface IQuestionData extends IQuestion {
     responses: {
         [year: string]: {
             values: IResponse[]
-            demographies: string[]
+            demographies: string[] // all possible demographic variables for a question by year
         }
     }
 }
@@ -45,5 +45,6 @@ interface IDemographySelectItem {
     disabled: boolean,
     active: boolean,
     text: string,
+    nice: string,
     code: string,
 }
