@@ -19,8 +19,8 @@ class Response(models.Model):
 
 class AvailableDemographyByQuestion(models.Model):
     year = models.IntegerField(default=0)
-    demography = models.ForeignKey(Demography, null=True)
-    question = models.ForeignKey(Question, null=True)
+    demography = models.ForeignKey(Demography, related_name='question_year_permutations', null=True)
+    question = models.ForeignKey(Question, related_name='demog_year_permutations', null=True)
 
     class Meta:
         unique_together = ('year', 'demography', 'question')

@@ -3,7 +3,7 @@ from django.db.models.expressions import RawSQL
 from rest_framework import generics
 from rest_framework.response import Response as ApiResponse
 from .models import Question
-from psppi.responses.models import Demography, Response as ResponseModel
+from psppi.responses.models import AvailableDemographyByQuestion, Demography, Response as ResponseModel
 from .serializers import QuestionSerializer
 from collections import defaultdict
 
@@ -33,11 +33,26 @@ class QuestionDetailView(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         question = QuestionSerializer(instance).data
+
+        # ---- gather possible Demographies for this question ---- #
+        demogs_with_years = AvailableDemographyByQuestion.objects.filter(question=instance).values('demography__code', 'year')
+
+        # all possible demographies for this particular question
+        unq_demog_codes = set([d['demography__code'] for d in demogs_with_years])
+        question['demographies'] = list(unq_demog_codes)
+
+        # dictionary of demog codes by year for this question
+        demogs_grouped_by_year = defaultdict(list)
+        for d in demogs_with_years:
+            demogs_grouped_by_year[d['year']].append(d['demography__code'])
+
+        # ---- gather Responses ---- #
+        # construct a DRY query
         responsesQuery = ResponseModel.objects.filter(question_id=instance.pk)
 
         # check if legal demography filter requested
         demog = request.query_params.get('demog', None)
-        if demog and demog in [d.code for d in Demography.objects.all()]:
+        if demog and demog in unq_demog_codes:
             question['demog'] = demog
             responsesQuery = responsesQuery.annotate(demog=RawSQL(
                 "demographics -> %s", (demog,))).values('demog', 'value', 'year')
@@ -52,8 +67,15 @@ class QuestionDetailView(generics.RetrieveAPIView):
             grouped_responses[r['year']].append({
                 'count': r['value__count'],
                 'value': str(r['value']),  # strings to accomodate JSON
-                'demog': str(r.get('demog', -1))  # -1 indicates 'any' demography  
+                'demog': str(r.get('demog', -1))  # -1 indicates 'any' demography 
             })
-        question['responses'] = grouped_responses
+
+        # -- Hash by year the response values and the possible demography variables for that year -- #
+        question['responses'] = {}
+        for year in grouped_responses.keys():
+            question['responses'][year] = {
+                'demographies': demogs_grouped_by_year[year],
+                'values': grouped_responses[year]
+            }
 
         return ApiResponse(question)
