@@ -14,7 +14,12 @@ interface IQuestion {
 
 interface IQuestionData extends IQuestion {
     demog: string,    
-    responses: {[year: string]: IResponse[]}
+    responses: {
+        [year: string]: {
+            values: IResponse[]
+            demographies: string[]
+        }
+    }
 }
 
 
