@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { ApiService } from '../core/api.service';
 import { Store } from '@ngrx/store';
 import { setDemography, setQuestions } from '../core/reducers';
+import { QuestionService } from '../core/question.service';
 import { find, flatten, isEmpty, propEq, values } from 'ramda';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/operator/switchMap';
@@ -34,6 +35,7 @@ export class InitialData implements Resolve<any> {
 export class QuestionData implements Resolve<any> {
     constructor(
         private api: ApiService,
+                private questionService: QuestionService,
         private router: Router,
         private store: Store<AppState>,
     ) {}
@@ -50,7 +52,7 @@ export class QuestionData implements Resolve<any> {
                     this.router.navigate([`/explore/${qs[0].id}`]);
                     return Observable.of(false);
                 } else {
-                    return this.api.request('get', `questions/${qID}`);
+                    return this.questionService.fetchQuestionData(qID);
                 }
             });
     }

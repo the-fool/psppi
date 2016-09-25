@@ -37,3 +37,23 @@ export const questions: ActionReducer<IQuestion[]> =
       return state;
   }
 };
+
+const SET_QUESTION_DATA = 'questions/SET_QUESTION_DATA';
+export function setQuestionData(payload: IQuestionData): Action {
+  return {
+    type: SET_QUESTION_DATA,
+    payload
+  };
+}
+
+const QUESTION_DATA_INIT = {};
+export const data: ActionReducer<IQuestionData> =
+(state = QUESTION_DATA_INIT, {type, payload}: Action) => {
+  switch (type) {
+    case SET_QUESTION_DATA:
+      return payload;
+    default:
+      return state;
+  }
+};
+
