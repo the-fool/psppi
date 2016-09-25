@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { QuestionService } from '../core/question.service';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { compose, curry, equals, find, isNil, map, merge, prepend, toPairs, prop, keys } from 'ramda';
 
@@ -8,7 +9,8 @@ import { compose, curry, equals, find, isNil, map, merge, prepend, toPairs, prop
 @Component({
     template: `
     <h1>Explore the Data!</h1>
-    <demography-selector [allDemogs]="demography$ | async" [demographies]="demographyOptions$ | async">
+    <demography-selector [demographies]="demographyOptions$ | async"
+        (onSelectDemog)="onSelectDemog($event)">
     </demography-selector>
     <year-selector [years]="yearOptions$ | async" (onSelectYear)="onSelectYear($event)">
     </year-selector>
@@ -22,13 +24,12 @@ export class ExploreComponent {
     private demographyOptions$: Observable<IDemographySelectOption[]>;
     private yearOptions$: Observable<IYearSelectOption[]>;
     private selectedYear$ = new BehaviorSubject<string>('all');
-    // private selectedDemog$ = new BehaviorSubject<string>('any');
     private initSelectedQuestion$: Observable<IQuestion[]>;
     private questionOptions$: Observable<SelectChildrenItem[]>;
     constructor(
-        private route: ActivatedRoute,
         private store: Store<AppState>,
-        private router: Router
+        private router: Router,
+        private questionService: QuestionService
     ) {
         const selectedQuestion$ = store.select(s => s.data);
 
@@ -86,7 +87,7 @@ export class ExploreComponent {
     }
 
     onSelectQuestion({id, text}) {
-        console.log(id);
+        this.selectedYear$.next('all');
         this.router.navigate([`/explore/${id}`]);
     }
 
@@ -95,6 +96,10 @@ export class ExploreComponent {
     }
 
     onSelectDemog(code: string) {
-        
+        const demog = (code !== 'any') ? code : null;
+        this.store.select(s => s.data)
+            .map(prop('id'))
+            .take(1)
+            .subscribe(id => this.questionService.fetchQuestionData(+id, demog));
     }
 }

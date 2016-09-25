@@ -5,16 +5,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     template: `
     <div class="btn-group-vertical">
     <button *ngFor="let d of demographies" type="button" [disabled]="d.disabled" [ngClass]="{'active': d.active}"
-        (click)="selectDemog.emit(d.code)" class="btn btn-primary">
+        (click)="onSelectDemog.emit(d.code)" class="btn btn-primary">
     {{d.nice}}
     </button>
     </div>
     `
 })
 export class DemographySelectorComponent {
-    @Input() allDemogs: IDemography[];
-    @Input() employableDemogs: number[]; // list of keys
-    @Input() demographies: IDemographySelectItem[];
-    @Output() selectDemog = new EventEmitter<string>();
+    @Input() demographies: IDemographySelectOption[];
+    @Output() onSelectDemog = new EventEmitter<string>();
 
 }

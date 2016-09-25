@@ -9,7 +9,6 @@ export class ApiService {
   private headers: Headers;
   private options: RequestOptions;
 
-
   constructor(
     private http: Http,
     private cookie: CookieService,
