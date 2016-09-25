@@ -41,10 +41,13 @@ interface SelectChildrenItem {
     children: {id: number|string, text: string}[]
 }
 
-interface IDemographySelectItem {
+interface ISelectOptionMixin {
     disabled: boolean,
     active: boolean,
-    text: string,
-    nice: string,
-    code: string,
+}
+
+interface IDemographySelectOption extends IDemography, ISelectOptionMixin {}
+
+interface IYearSelectOption extends ISelectOptionMixin {
+    value: string
 }

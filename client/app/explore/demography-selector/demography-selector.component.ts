@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     selector: 'demography-selector',
     template: `
     <div class="btn-group-vertical">
-    <button *ngFor="let d of demographies" type="button" [disabled]="d.disabled" 
+    <button *ngFor="let d of demographies" type="button" [disabled]="d.disabled" [ngClass]="{'active': d.active}"
         (click)="selectDemog.emit(d.code)" class="btn btn-primary">
     {{d.nice}}
     </button>

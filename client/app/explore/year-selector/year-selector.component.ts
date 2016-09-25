@@ -4,14 +4,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     selector: 'year-selector',
     template: `
     <div class="btn-group-vertical">
-    <button *ngFor="let year of years" type="button" 
-        (click)="onSelectYear.emit(year)" class="btn btn-primary">
-        {{year}}
+    <button *ngFor="let year of years" type="button" [disabled]="year.disabled"
+        [ngClass]="{'active': year.active}"
+        (click)="onSelectYear.emit(year.value)" class="btn btn-primary">
+        {{year.value}}
     </button>
     </div>
     `
 })
 export class YearSelectorComponent {
-    @Input() years: string[];
+    @Input() years: IYearSelectOption[];
     @Output() onSelectYear = new EventEmitter<string>();
 }
