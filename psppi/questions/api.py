@@ -75,7 +75,7 @@ class QuestionDetailView(generics.RetrieveAPIView):
         for year in grouped_responses.keys():
             question['responses'][year] = {
                 'demographies': demogs_grouped_by_year[year],
-                'values': grouped_responses[year]
+                'values': sorted(grouped_responses[year], key=lambda k: k['value'])
             }
 
         return ApiResponse(question)
