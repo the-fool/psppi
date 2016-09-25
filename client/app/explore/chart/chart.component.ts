@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 declare const d3: any;
 @Component({
     selector: 'chart',
@@ -8,9 +8,16 @@ declare const d3: any;
     </div>
     `
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnChanges {
+    @Input('data') _data: IQuestionData;
+    @Input() year: string;
     private data;
     private options;
+
+    ngOnChanges(changes: SimpleChanges) {
+      console.log(changes);
+      
+    }
     ngOnInit() {
         this.options = {
       chart: {

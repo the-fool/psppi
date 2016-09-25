@@ -17,12 +17,12 @@ import { compose, curry, equals, find, isNil, map, merge, prepend, toPairs, prop
     <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
         (onSelectQuestion)="onSelectQuestion($event)">
     </question-selector>
-    <chart></chart>
+    <chart [data]="questionData$ | async" [year]="selectedYear$ | async"></chart>
     `
 })
 export class ExploreComponent {
-    private demography$: Observable<IDemography[]>;
     private demographyOptions$: Observable<IDemographySelectOption[]>;
+    private questionData$: Observable<IQuestionData>;
     private yearOptions$: Observable<IYearSelectOption[]>;
     private selectedYear$ = new BehaviorSubject<string>('all');
     private initSelectedQuestion$: Observable<IQuestion[]>;
@@ -32,11 +32,10 @@ export class ExploreComponent {
         private router: Router,
         private questionService: QuestionService
     ) {
-        const selectedQuestion$ = store.select(s => s.data);
+        this.questionData$ = store.select(s => s.data);
 
         // for some reason, ng2-select wants an array
-        this.initSelectedQuestion$ = selectedQuestion$.map(Array).take(1);
-        this.demography$ = store.select(s => s.demography);
+        this.initSelectedQuestion$ = this.questionData$.map(Array).take(1);
         this.questionOptions$ = store.select(s => s.questions).map(qs => {
             const child = (o: {code: string, text: string}) =>
                 ({id: prop<number>('id', o), text: prop<string>('text', o)});
@@ -46,7 +45,7 @@ export class ExploreComponent {
         });
 
         this.yearOptions$ = Observable.combineLatest(
-            selectedQuestion$,
+            this.questionData$,
             this.selectedYear$,
             (question, selectedYear) => {
                 // TODO: get from api
@@ -64,7 +63,7 @@ export class ExploreComponent {
         // and if a demography optin is selected, it should be set to 'active'
         this.demographyOptions$ = Observable.combineLatest(
             store.select(s => s.demography), // all possible demographic variables
-            selectedQuestion$,  // the current question
+            this.questionData$,  // the current question
             this.selectedYear$,  // the current year filter
             (demogs, question, year) => {
                 // Is this insane -- or elegant?

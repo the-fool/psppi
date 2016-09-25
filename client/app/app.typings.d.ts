@@ -1,5 +1,5 @@
 interface AppState {
-    data: IQuestionData[],
+    data: IQuestionData,
     questions: {[group: string]: IQuestion[]},
     demography: IDemography[]
 }
