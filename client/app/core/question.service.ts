@@ -12,6 +12,7 @@ export class QuestionService {
     fetchQuestionData(id: number, demography?: string) {
         const params = demography ? { demog: demography } : null;
         return this.api.request('get', `questions/${id}`, params).then(res => {
+            console.log('API REQUEST');
             this.store.dispatch(setQuestionData(res));
             return res;
         });

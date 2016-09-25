@@ -3,7 +3,7 @@ import { CookieService } from 'angular2-cookie/core';
 import { ApiService } from './api.service';
 import { QuestionService } from './question.service';
 import { provideStore, combineReducers } from '@ngrx/store';
-import { questions, demography } from './reducers';
+import { questions, demography, data } from './reducers';
 
 @NgModule({
     providers: [
@@ -12,7 +12,8 @@ import { questions, demography } from './reducers';
         QuestionService,
         provideStore(combineReducers({
             questions,
-            demography
+            demography,
+            data
         }))
     ]
 })

@@ -30,9 +30,7 @@ export class ExploreComponent {
         private store: Store<AppState>,
         private router: Router
     ) {
-        console.log('cunstruct');
-
-        const selectedQuestion$ = route.data.map(d => d['questionData']);
+        const selectedQuestion$ = store.select(s => s.data);
 
         // for some reason, ng2-select wants an array
         this.initSelectedQuestion$ = selectedQuestion$.map(Array).take(1);
@@ -82,9 +80,7 @@ export class ExploreComponent {
                         const disabled = (code(d) === 'any') ? false : isNil(find(equals(code(d)), possibleDemographies));
                         return merge(d, {active, disabled});
                     };
-                const ret = map(toDemogOption, allDemogs);
-                console.log(ret);
-                return ret;
+                return map(toDemogOption, allDemogs);
             }
         );
     }
