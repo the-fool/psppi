@@ -1,10 +1,11 @@
-import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { lensProp, map, prop, set } from 'ramda';
+import { Component, ViewEncapsulation, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { add, compose, groupBy, keys, lensProp, map, prop, reduce, set } from 'ramda';
 declare const d3: any;
+const style = require('nvd3/build/nv.d3.css');
 
 interface BarData {
   key: string;
-  values: { label: string, value: number }[];
+  values: Datum[];
 }
 
 interface Datum {
@@ -14,6 +15,8 @@ interface Datum {
 
 @Component({
   selector: 'chart',
+  encapsulation: ViewEncapsulation.None,
+  styles: [style],
   template: `
     <div>
     <nvd3 [options]="options" [data]="data"></nvd3>
@@ -23,11 +26,12 @@ interface Datum {
 export class ChartComponent implements OnInit, OnChanges {
   @Input() questionData: IQuestionData;
   @Input() year: string;
-  private data;
+  @Input() demogDict: { [code: string]: IDemography };
+  private data: BarData[];
   private options;
   private barOptions = {
     chart: {
-      type: 'discreteBarChart',
+      type: 'multiBarChart',
       height: 450,
       margin: {
         top: 20,
@@ -35,10 +39,13 @@ export class ChartComponent implements OnInit, OnChanges {
         bottom: 50,
         left: 55
       },
+      //forceY: [0, 1],
       x: prop('label'),
       y: prop('value'),
       showValues: true,
-      valueFormat: d3.format(',.0f'),
+      tooltip: {
+        valueFormatter: d3.format(',.1%')
+      },
       duration: 500,
       xAxis: {
         axisLabel: 'X Axis'
@@ -52,33 +59,44 @@ export class ChartComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     console.log(changes);
-    if (changes['year']) {
+    let values;
+    if (changes['year'] || changes['questionData']) {
       if (this.year === 'all') {
         // TODO
+        // linechart
         return;
+      } else {
+        const responses = this.questionData.responses[this.year].values;
+        const valuesByDemog = groupBy<IResponse>(prop('demog'), responses);
+        console.log('VsByDemog', valuesByDemog);
+        const demogDict = this.questionData.demog === 'any' ?
+          { 0: 'Any' } :
+          this.demogDict[this.questionData.demog].values;
+        this.data = map(
+          demog => ({
+            key: demogDict[demog],
+            values: this.translateLabels(
+              this.questionData.values,
+              this.computeBarData(valuesByDemog[demog])
+            )
+          }), keys(valuesByDemog));
+        console.log(this.data);
       }
-      const values = this.translateLabels(
-        this.questionData.values,
-        this.computeBarData(this.questionData.responses[this.year].values)
-      );
-      this.data = [{
-        key: this.questionData.code,
-        values
-      }];
-      console.log(this.data);
     }
   }
 
-  computeBarData(data: {count: number, demog: string, value: string}[]): Datum[] {
-    const datumToBar = (d: {count: number, demog: string, value: string}) => {
+  computeBarData(data: { count: number, demog: string, value: string }[]): Datum[] {
+    const denom = reduce<number, number>(add, 0, map<IResponse, number>(prop('count'), data));
+    const datumToBar = (d: { count: number, demog: string, value: string }) => {
       const label = d.value;
-      const value = d.count;
-      return {label, value};
+      const value = d.count / denom;
+      const demog = d.demog;
+      return { label, value };
     };
     return map(datumToBar, data);
   }
 
-  translateLabels(labelDict: {[key: number]: string}, data: Datum[]) {
+  translateLabels(labelDict: { [key: number]: string }, data: Datum[]) {
     const setLabel = (d: Datum) => {
       const newLabel = labelDict[+d.label];
       return set(lensProp('label'), newLabel, d);
@@ -88,45 +106,5 @@ export class ChartComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.options = this.barOptions;
-    this.data = [
-      {
-        key: "Cumulative Return",
-        values: [
-          {
-            "label": "A",
-            "value": -29.765957771107
-          },
-          {
-            "label": "B",
-            "value": 0
-          },
-          {
-            "label": "C",
-            "value": 32.807804682612
-          },
-          {
-            "label": "D",
-            "value": 196.45946739256
-          },
-          {
-            "label": "E",
-            "value": 0.19434030906893
-          },
-          {
-            "label": "F",
-            "value": -98.079782601442
-          },
-          {
-            "label": "G",
-            "value": -13.925743130903
-          },
-          {
-            "label": "H",
-            "value": -5.1387322875705
-          }
-        ]
-      }
-    ];
-
   }
 }

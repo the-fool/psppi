@@ -53,7 +53,9 @@ class Command(BaseCommand):
                                 year=year,
                                 question=questions[col],
                                 value=row[col],
-                                demographics={demog: row[demog] for demog in demogs if not pd.isnull(row[demog])}
+                                demographics={demog: int(row[demog]) for demog in demogs if
+                                              not pd.isnull(row[demog]) and
+                                              (type(row[demog]) is not str or not row[demog].isspace())}
                             )
                         )
                         for demog in demogs:
@@ -65,4 +67,3 @@ class Command(BaseCommand):
                 question=questions[dbq[1]],
                 year=dbq[2]
             ) for dbq in available_demog_by_question])
-

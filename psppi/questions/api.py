@@ -64,11 +64,12 @@ class QuestionDetailView(generics.RetrieveAPIView):
         responses = responsesQuery.annotate(Count('value'))
         grouped_responses = defaultdict(list)
         for r in responses:
-            grouped_responses[r['year']].append({
-                'count': r['value__count'],
-                'value': str(r['value']),  # strings to accomodate JSON
-                'demog': str(r.get('demog', -1))  # -1 indicates 'any' demography 
-            })
+            if r.get('demog', True):
+                grouped_responses[r['year']].append({
+                    'count': r['value__count'],
+                    'value': str(r['value']),  # strings to accomodate JSON
+                    'demog': r.get('demog', 0)  # 0 indicates 'any' demography 
+                })
 
         # -- Hash by year the response values and the possible demography variables for that year -- #
         question['responses'] = {}

@@ -3,7 +3,7 @@ import { QuestionService } from '../core/question.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { compose, curry, equals, find, isNil, map, merge, prepend, toPairs, prop, keys } from 'ramda';
+import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, prop, reduce, set, toPairs, keys } from 'ramda';
 
 
 @Component({
@@ -17,11 +17,12 @@ import { compose, curry, equals, find, isNil, map, merge, prepend, toPairs, prop
     <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
         (onSelectQuestion)="onSelectQuestion($event)">
     </question-selector>
-    <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async"></chart>
+    <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async" [demogDict]="demographyDict$ | async"></chart>
     `
 })
 export class ExploreComponent {
     private demographyOptions$: Observable<IDemographySelectOption[]>;
+    private demographyDict$: Observable<{[code: string]: IDemography}>;
     private questionData$: Observable<IQuestionData>;
     private yearOptions$: Observable<IYearSelectOption[]>;
     private selectedYear$ = new BehaviorSubject<string>('all');
@@ -33,7 +34,8 @@ export class ExploreComponent {
         private questionService: QuestionService
     ) {
         this.questionData$ = store.select(s => s.data);
-
+        this.demographyDict$ = store.select(s => s.demography)
+                                    .map(reduce((a, i) => set(lensProp(prop<string>('code', i)), i, a), {}));
         // for some reason, ng2-select wants an array
         this.initSelectedQuestion$ = this.questionData$.map(Array).take(1);
         this.questionOptions$ = store.select(s => s.questions).map(qs => {
