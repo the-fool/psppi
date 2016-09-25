@@ -7,6 +7,7 @@ import { ExploreComponent } from './explore.component';
 import { DemographySelectorComponent } from './demography-selector/demography-selector.component';
 import { YearSelectorComponent } from './year-selector/year-selector.component';
 import { QuestionSelectorComponent } from './question-selector/question-selector.component';
+import { ChartComponent } from './chart/chart.component';
 import { ROUTES } from './explore.routing';
 @NgModule({
     imports: [
@@ -19,6 +20,7 @@ import { ROUTES } from './explore.routing';
         ExploreDemogGuard
     ],
     declarations: [
+        ChartComponent,
         DemographySelectorComponent,
         YearSelectorComponent,
         QuestionSelectorComponent,
