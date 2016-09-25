@@ -17,7 +17,7 @@ import { compose, curry, equals, find, isNil, map, merge, prepend, toPairs, prop
     <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
         (onSelectQuestion)="onSelectQuestion($event)">
     </question-selector>
-    <chart [data]="questionData$ | async" [year]="selectedYear$ | async"></chart>
+    <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async"></chart>
     `
 })
 export class ExploreComponent {
