@@ -32,7 +32,7 @@ export class ChartComponent implements OnInit, OnChanges {
   private barOptions = {
     chart: {
       type: 'multiBarChart',
-      height: 450,
+      height: 500,
       margin: {
         top: 20,
         right: 20,

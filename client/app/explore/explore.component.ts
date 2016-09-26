@@ -8,16 +8,27 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
 
 @Component({
     template: `
-    <h1>Explore the Data!</h1>
-    <demography-selector [demographies]="demographyOptions$ | async"
-        (onSelectDemog)="onSelectDemog($event)">
-    </demography-selector>
-    <year-selector [years]="yearOptions$ | async" (onSelectYear)="onSelectYear($event)">
-    </year-selector>
-    <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
+    <div class="container">
+    <div class="col-md-12">
+        <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
         (onSelectQuestion)="onSelectQuestion($event)">
-    </question-selector>
-    <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async" [demogDict]="demographyDict$ | async"></chart>
+        </question-selector>
+    </div>
+    <div class="row">
+        <div id="demog-selector" class="pull-left col-md-2">
+            <demography-selector [demographies]="demographyOptions$ | async"
+            (onSelectDemog)="onSelectDemog($event)">
+            </demography-selector>
+        </div>
+        <div id="chart-wrapper">
+            <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async" [demogDict]="demographyDict$ | async"></chart>
+        </div>
+        <div id="year-selector" class="col-md-3">
+            <year-selector [years]="yearOptions$ | async" (onSelectYear)="onSelectYear($event)">
+            </year-selector>
+        </div>
+    </div>
+    </div>
     `
 })
 export class ExploreComponent {
