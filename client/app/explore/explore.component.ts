@@ -29,7 +29,8 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
             </div>
         </div>
     </div>
-    `
+    `,
+    styleUrls: ['explore.style']
 })
 export class ExploreComponent {
     private demographyOptions$: Observable<IDemographySelectOption[]>;

@@ -40,17 +40,16 @@ export class ChartComponent implements OnChanges {
         bottom: 40,
         left: 55
       },
+      forceY: [0, 1],
       x: prop('x'),
       y: prop('y'),
       useInteractiveGuideline: true,
       xAxis: {
-        axisLabel: 'Percentage'
+        axisLabel: 'Year'
       },
       yAxis: {
-        axisLabel: 'Voltage (v)',
-        tickFormat: function(d){
-          return d3.format('.02f')(d);
-        },
+        axisLabel: 'Percentage',
+        tickFormat: d3.format(',.0%'),
         axisLabelDistance: -10
       },
     }
@@ -65,7 +64,7 @@ export class ChartComponent implements OnChanges {
         bottom: 50,
         left: 55
       },
-      //forceY: [0, 1],
+      forceY: [0, 1],
       x: prop('label'),
       y: prop('value'),
       showValues: true,
