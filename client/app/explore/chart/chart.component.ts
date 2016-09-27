@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { add, always, compose, find, groupBy, ifElse, keys, lensProp, map, prop, propEq, reduce, set, xprod } from 'ramda';
+import { add, always, compose, find, groupBy, ifElse, keys, lensProp, map, mapObjIndexed, prop, propEq, reduce, set, xprod } from 'ramda';
 declare const d3: any;
 const style = require('nvd3/build/nv.d3.css');
 
@@ -24,7 +24,7 @@ interface Datum {
     </div>
     `
 })
-export class ChartComponent implements OnInit, OnChanges {
+export class ChartComponent implements OnChanges {
   @Input() questionData: IQuestionData;
   @Input() year: string;
   @Input() demogDict: { [code: string]: IDemography };
@@ -85,7 +85,6 @@ export class ChartComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     console.log(changes);
-    let values;
     if (changes['year'] || changes['questionData']) {
       if (this.year === 'all') {
         // set line chart scheme
@@ -96,10 +95,9 @@ export class ChartComponent implements OnInit, OnChanges {
         const permutations = map(pair => ({demog: pair[0], value: pair[1]}), xprod(keys(demogDict), keys(valueDict)));
 
         // valuesByDemogByYear :: { [year: number]: {[demog: number]: IResponse[]}}
-        const valuesByDemogByYear = reduce(
-          (a, i) => set(lensProp(i), this._getValuesGroupedByDemog(this.questionData.responses[i].values), a),
-          {},
-          keys(this.questionData.responses)
+        const valuesByDemogByYear = mapObjIndexed(
+          (year, key, responses) => this._getValuesGroupedByDemog(responses[key].values),
+          this.questionData.responses
         );
         this.data = map(
           demogValuePair => ({
@@ -163,9 +161,5 @@ export class ChartComponent implements OnInit, OnChanges {
       return set(lensProp('label'), newLabel, d);
     };
     return map(setLabel, data);
-  }
-
-  ngOnInit() {
-    this.options = this.barOptions;
   }
 }
