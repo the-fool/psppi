@@ -3,7 +3,7 @@ import { escapeRegexp } from './common';
 
 @Pipe({name: 'highlight'})
 export class HighlightPipe implements PipeTransform {
-  public transform(value:string, args:any[]):any {
+  public transform(value: any, args:any[]):any {
     var value = value.changingThisBreaksApplicationSecurity;
     if (args.length < 1) {
       return value;

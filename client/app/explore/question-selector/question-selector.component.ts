@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'question-selector',
+    styleUrls: ['./question-selector.scss'],
+    encapsulation: ViewEncapsulation.None,
     template: `
     <div>
    <ng-select   [allowClear]="true"
