@@ -19,19 +19,12 @@ docker-compose -f dev.yml run django python manage.py migrate
 # feed in some data
 docker-compose -f dev.yml run django make datasets
 
-# boot up the api server
+# boot up the servers
 docker-compose -f dev.yml up
 
-# frontend asset installation
-npm install
+# waith 5 minutes for that npm install
+# . . . . 
+# njoy
 
-# wait 3 minutes
-# . . .
-
-# boot up the frontend dev server
-npm start
 ```
 
-Note that the web-client stuff is not Dockerized, so you will need some system-wide dependencies (like npm and node, for starters).
-This is not ideal, but neither is rebuilding a Docker container every time you want to make a change to a node package.
-  
