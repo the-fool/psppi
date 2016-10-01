@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { add, always, compose, find, groupBy, ifElse, keys, lensProp, map, mapObjIndexed, prop, propEq, reduce, set, xprod } from 'ramda';
 declare const d3: any;
-const style = require('nvd3/build/nv.d3.css');
-
+const nvd3 = require('nvd3/build/nv.d3.css');
+const style = require('./chart.style');
 interface BarData {
   key: string;
   values: Datum[];
@@ -17,7 +17,8 @@ interface Datum {
 @Component({
   selector: 'chart',
   encapsulation: ViewEncapsulation.None,
-  styles: [style],
+  styles: [nvd3, style],
+
   template: `
     <div>
     <nvd3 [options]="options" [data]="data"></nvd3>

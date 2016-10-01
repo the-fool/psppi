@@ -8,14 +8,15 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
 
 @Component({
     template: `
-    <div class="container">
-        <div class="col-md-12">
+    <div>
+        <div id="question-selector-wrapper">
             <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
             (onSelectQuestion)="onSelectQuestion($event)">
             </question-selector>
         </div>
-        <div class="row">
-            <div id="demog-selector" class="pull-left">
+        <div id="abs-wrapper">
+        <div class="row" id="viz-widgets">
+            <div id="demog-selector">
                 <demography-selector [demographies]="demographyOptions$ | async"
                 (onSelectDemog)="onSelectDemog($event)">
                 </demography-selector>
@@ -28,6 +29,7 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
                 </year-selector>
             </div>
         </div>
+        </div>        
     </div>
     `,
     styleUrls: ['explore.style']
