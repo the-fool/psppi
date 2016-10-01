@@ -1,8 +1,12 @@
 import { Component, ViewEncapsulation, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
-import { add, always, compose, find, groupBy, ifElse, keys, lensProp, map, mapObjIndexed, prop, propEq, reduce, set, xprod } from 'ramda';
+import {
+  add, always, compose, find, filter, groupBy, ifElse, isNil, keys, lensProp, map,
+  mapObjIndexed, not, prop, propEq, reduce, set, toPairs, values, xprod
+} from 'ramda';
 declare const d3: any;
 const nvd3 = require('nvd3/build/nv.d3.css');
 const style = require('./chart.style');
+
 interface BarData {
   key: string;
   values: Datum[];
@@ -11,6 +15,11 @@ interface BarData {
 interface Datum {
   label: string;
   value: number;
+}
+
+interface ResponseOpt {
+  key: number;
+  label: string;
 }
 
 
@@ -22,6 +31,12 @@ interface Datum {
   template: `
     <div>
     <nvd3 [options]="options" [data]="data"></nvd3>
+    <div class="btn-grp">
+      <label *ngFor="let r of responseOpts" class="btn btn-primary" [(ngModel)]="selectedSpecificResponse"
+            btnRadio="{{r.key}}" (click)="_computeLineData(r.key)">
+            {{r.label}}
+    </label>
+    </div>
     </div>
     `
 })
@@ -31,11 +46,13 @@ export class ChartComponent implements OnChanges {
   @Input() demogDict: { [code: string]: IDemography };
   private data: any;
   private options = null;
+  private selectedSpecificResponse: number;
+  private responseOpts = [];
   private lineOptions = {
     chart: {
       type: 'lineChart',
       height: 450,
-      margin : {
+      margin: {
         top: 20,
         right: 20,
         bottom: 40,
@@ -107,6 +124,55 @@ export class ChartComponent implements OnChanges {
     }
   };
 
+  _computeLineData(specificResponse?: number) {
+    const demogDict = this._getDemogDict(this.questionData);
+    const valueDict = this.questionData.values;
+
+    // Group data series by response values, or response demography
+    // if there is a specific response to filter by, then we group data by demog
+    // else, we show all response values
+    let seriesDict;
+
+    // When grouping up responses by year, what predicate to use?    
+    let filterPredicate;
+    let seriesKey;
+    if (isNil(specificResponse)) {
+      seriesDict = valueDict;
+      filterPredicate = always(true);
+      seriesKey = 'value';
+    } else {
+      seriesDict = demogDict;
+      filterPredicate = propEq('value', specificResponse.toString());
+      seriesKey = 'demog';
+    }
+    console.log(seriesKey, valueDict, demogDict);
+
+    // valuesByYear :: { [year: number]: IResponse[] }    
+    const valuesByYearByGrouping = mapObjIndexed(
+      (year, key, responses) => {
+        const allValues = responses[key].values;
+        const possibleValues = filter<IResponse>(filterPredicate, allValues);
+        return <{[key: string]: IResponse}>reduce((acc, v) => set(lensProp(prop<string>(seriesKey, v)), v, acc), {}, possibleValues);
+      },
+      this.questionData.responses
+    );
+    console.log(valuesByYearByGrouping);
+
+    this.data = map(
+      k => ({
+        key: `${seriesDict[k]}`, // get nice label
+        values: map(
+          year => ({
+            x: +year,
+            y: this.computeLineDatum(valuesByYearByGrouping[year][k].value, values(valuesByYearByGrouping[year]))
+          }),
+          keys(valuesByYearByGrouping)
+        )
+      }),
+      keys(seriesDict));
+      console.log(this.data);
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     console.log(changes);
     if (changes['year'] || changes['questionData']) {
@@ -114,26 +180,18 @@ export class ChartComponent implements OnChanges {
         // set line chart scheme
         this.options = this.lineOptions;
 
-        const demogDict = this._getDemogDict(this.questionData);
-        const valueDict = this.questionData.values;
-        const permutations = map(pair => ({demog: pair[0], value: pair[1]}), xprod(keys(demogDict), keys(valueDict)));
-
-        // valuesByDemogByYear :: { [year: number]: {[demog: number]: IResponse[]}}
-        const valuesByDemogByYear = mapObjIndexed(
-          (year, key, responses) => this._getValuesGroupedByDemog(responses[key].values),
-          this.questionData.responses
-        );
-        this.data = map(
-          demogValuePair => ({
-            key: `${demogDict[demogValuePair.demog]}: ${valueDict[demogValuePair.value]}`,
-            values: map(
-              year => ({
-                x: +year,
-                y: this.computeLineDatum(demogValuePair.value, valuesByDemogByYear[year][demogValuePair.demog])
-              }),
-              keys(valuesByDemogByYear)
-          )}),
-        permutations);
+        // are we grouping by demog?
+        if (this.questionData.demog === 'any') {
+          // clear out responseOpt buttons
+          this.responseOpts = [];
+          this._computeLineData();
+        } else {
+          // set response opt buttons
+          this.responseOpts = map(e => ({ key: e[0], label: e[1] }), toPairs(this.questionData.values));
+          // Pick first response value, as default
+          this.selectedSpecificResponse = this.responseOpts[0].key;
+          this._computeLineData(this.selectedSpecificResponse);
+        }
       } else if (this.questionData.demog !== 'any') {
         // Individual year, individual demog
         this.options = this.barOptions;
@@ -151,34 +209,34 @@ export class ChartComponent implements OnChanges {
         // Individual year, no demog
         this.options = this.pieOptions;
         this.data = [
-            {
-                key: "One",
-                y: 5
-            },
-            {
-                key: "Two",
-                y: 2
-            },
-            {
-                key: "Three",
-                y: 9
-            },
-            {
-                key: "Four",
-                y: 7
-            },
-            {
-                key: "Five",
-                y: 4
-            },
-            {
-                key: "Six",
-                y: 3
-            },
-            {
-                key: "Seven",
-                y: .5
-            }
+          {
+            key: "One",
+            y: 5
+          },
+          {
+            key: "Two",
+            y: 2
+          },
+          {
+            key: "Three",
+            y: 9
+          },
+          {
+            key: "Four",
+            y: 7
+          },
+          {
+            key: "Five",
+            y: 4
+          },
+          {
+            key: "Six",
+            y: 3
+          },
+          {
+            key: "Seven",
+            y: .5
+          }
         ];
 
       }
@@ -189,7 +247,7 @@ export class ChartComponent implements OnChanges {
     return groupBy<IResponse>(prop('demog'), responses);
   }
 
-  _getDemogDict(questionData: IQuestionData): {[code: string]: string} {
+  _getDemogDict(questionData: IQuestionData): { [code: string]: string } {
     return questionData.demog === 'any' ? { 0: 'Any' } : this.demogDict[this.questionData.demog].values;
   }
 
