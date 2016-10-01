@@ -83,6 +83,30 @@ export class ChartComponent implements OnChanges {
     }
   };
 
+  private pieOptions = {
+    chart: {
+      type: 'pieChart',
+      height: 700,
+      donut: true,
+      x: prop('key'),
+      y: prop('y'),
+      showLabels: true,
+      duration: 500,
+      pie: {
+        startAngle: d => d.startAngle / 2 - Math.PI / 2,
+        endAngle: d => d.endAngle / 2 - Math.PI / 2
+      },
+      legend: {
+        margin: {
+          top: 5,
+          right: 140,
+          bottom: 5,
+          left: 0
+        }
+      }
+    }
+  };
+
   ngOnChanges(changes: SimpleChanges) {
     console.log(changes);
     if (changes['year'] || changes['questionData']) {
@@ -110,7 +134,8 @@ export class ChartComponent implements OnChanges {
               keys(valuesByDemogByYear)
           )}),
         permutations);
-      } else {
+      } else if (this.questionData.demog !== 'any') {
+        // Individual year, individual demog
         this.options = this.barOptions;
         const valuesByDemog = this._getValuesGroupedByDemog(this.questionData.responses[this.year].values);
         const demogDict = this._getDemogDict(this.questionData);
@@ -122,6 +147,40 @@ export class ChartComponent implements OnChanges {
               this.computeBarData(valuesByDemog[demog])
             )
           }), keys(valuesByDemog));
+      } else {
+        // Individual year, no demog
+        this.options = this.pieOptions;
+        this.data = [
+            {
+                key: "One",
+                y: 5
+            },
+            {
+                key: "Two",
+                y: 2
+            },
+            {
+                key: "Three",
+                y: 9
+            },
+            {
+                key: "Four",
+                y: 7
+            },
+            {
+                key: "Five",
+                y: 4
+            },
+            {
+                key: "Six",
+                y: 3
+            },
+            {
+                key: "Seven",
+                y: .5
+            }
+        ];
+
       }
     }
   }
