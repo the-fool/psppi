@@ -5,6 +5,7 @@ volumes:
   postgres_backup_dev: {}
 
 services:
+
   postgres:
     build: ./compose/postgres
     volumes:
@@ -12,6 +13,18 @@ services:
       - postgres_backup_dev:/backups
     environment:
       - POSTGRES_USER=psppi
+
+  client:
+      build:
+        context: .
+        dockerfile: ./compose/client/Dockerfile
+      links:
+        - django
+      volumes:
+        - .:/app
+      command: npm start
+      ports:
+        - "3000:3000"
 
   django:
     build:
