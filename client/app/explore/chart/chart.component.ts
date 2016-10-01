@@ -33,7 +33,7 @@ interface ResponseOpt {
     <nvd3 [options]="options" [data]="data"></nvd3>
     <div class="btn-grp">
       <label *ngFor="let r of responseOpts" class="btn btn-primary" [(ngModel)]="selectedSpecificResponse"
-            btnRadio="{{r.key}}" (click)="_computeLineData(r.key)">
+            btnRadio="{{r.key}}" (click)="_constructLineData(r.key)">
             {{r.label}}
     </label>
     </div>
@@ -124,7 +124,7 @@ export class ChartComponent implements OnChanges {
     }
   };
 
-  _computeLineData(specificResponse?: number) {
+  _constructLineData(specificResponse?: number) {
     const demogDict = this._getDemogDict(this.questionData);
     const valueDict = this.questionData.values;
 
@@ -132,21 +132,17 @@ export class ChartComponent implements OnChanges {
     // if there is a specific response to filter by, then we group data by demog
     // else, we show all response values
     let seriesDict;
-
-    // When grouping up responses by year, what predicate to use?    
-    let filterPredicate;
+    let filterPredicate; // how to filter response data
     let seriesKey;
     if (isNil(specificResponse)) {
       seriesDict = valueDict;
-      filterPredicate = always(true);
+      filterPredicate = always(true); // 'any' demog requires no filtering
       seriesKey = 'value';
     } else {
       seriesDict = demogDict;
       filterPredicate = propEq('value', specificResponse.toString());
       seriesKey = 'demog';
     }
-    console.log(seriesKey, valueDict, demogDict);
-
     // valuesByYear :: { [year: number]: IResponse[] }    
     const valuesByYearByGrouping = mapObjIndexed(
       (year, key, responses) => {
@@ -156,7 +152,6 @@ export class ChartComponent implements OnChanges {
       },
       this.questionData.responses
     );
-    console.log(valuesByYearByGrouping);
 
     this.data = map(
       k => ({
@@ -164,7 +159,9 @@ export class ChartComponent implements OnChanges {
         values: map(
           year => ({
             x: +year,
-            y: this.computeLineDatum(valuesByYearByGrouping[year][k].value, values(valuesByYearByGrouping[year]))
+            y: this.computeLineDatum(
+              valuesByYearByGrouping[year][k],
+              values(valuesByYearByGrouping[year]))
           }),
           keys(valuesByYearByGrouping)
         )
@@ -184,13 +181,13 @@ export class ChartComponent implements OnChanges {
         if (this.questionData.demog === 'any') {
           // clear out responseOpt buttons
           this.responseOpts = [];
-          this._computeLineData();
+          this._constructLineData();
         } else {
           // set response opt buttons
           this.responseOpts = map(e => ({ key: e[0], label: e[1] }), toPairs(this.questionData.values));
           // Pick first response value, as default
           this.selectedSpecificResponse = this.responseOpts[0].key;
-          this._computeLineData(this.selectedSpecificResponse);
+          this._constructLineData(this.selectedSpecificResponse);
         }
       } else if (this.questionData.demog !== 'any') {
         // Individual year, individual demog
@@ -255,12 +252,12 @@ export class ChartComponent implements OnChanges {
     return reduce<number, number>(add, 0, map<IResponse, number>(ifElse(prop('count'), prop('count'), always(0)), data));
   }
 
-  computeLineDatum(value: string, data: IResponse[]) {
+  computeLineDatum(datum: any, data: IResponse[]) {
     if (!data) return 0;
     const denom = this._getDenominator(data);
-    const datum = find(propEq('value', value), data);
     return datum ? datum.count / denom : 0;
   }
+
   computeBarData(data: IResponse[]): Datum[] {
     const denom = this._getDenominator(data);
     const datumToBar = (d: { count: number, demog: string, value: string }) => {
