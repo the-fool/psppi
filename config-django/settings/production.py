@@ -38,18 +38,18 @@ MIDDLEWARE_CLASSES = WHITENOISE_MIDDLEWARE + MIDDLEWARE_CLASSES
 # and https://docs.djangoproject.com/ja/1.9/howto/deployment/checklist/#run-manage-py-check-deploy
 
 # set this to 60 seconds and then to 518400 when you can prove it works
-SECURE_HSTS_SECONDS = 60
-SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
-    'DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
-SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
-    'DJANGO_SECURE_CONTENT_TYPE_NOSNIFF', default=True)
-SECURE_BROWSER_XSS_FILTER = True
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
-SECURE_SSL_REDIRECT = env.bool('DJANGO_SECURE_SSL_REDIRECT', default=True)
-CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS = 60
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool(
+#     'DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
+# SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
+#     'DJANGO_SECURE_CONTENT_TYPE_NOSNIFF', default=True)
+# SECURE_BROWSER_XSS_FILTER = True
+# SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_HTTPONLY = True
+# SECURE_SSL_REDIRECT = env.bool('DJANGO_SECURE_SSL_REDIRECT', default=False)
+# CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
-X_FRAME_OPTIONS = 'DENY'
+# X_FRAME_OPTIONS = 'DENY'
 
 # SITE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -100,8 +100,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # EMAIL
 # ------------------------------------------------------------------------------
-# DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL',
-                         default='psppi <noreply@example.com>')
+#  DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL',
+#  default='psppi <noreply@example.com>')
 # EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[psppi] ')
 # SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 
@@ -109,13 +109,14 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # INSTALLED_APPS += ("anymail", )
 # ANYMAIL = {
 #    "MAILGUN_API_KEY": env('DJANGO_MAILGUN_API_KEY'),
-#}
+# }
 # EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See:
 # https://docs.djangoproject.com/en/dev/ref/templates/api/#django.template.loaders.cached.Loader
+
 TEMPLATES[0]['OPTIONS']['loaders'] = [
     ('django.template.loaders.cached.Loader', [
         'django.template.loaders.filesystem.Loader', 'django.template.loaders.app_directories.Loader', ]),
