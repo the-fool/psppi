@@ -27,12 +27,14 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
-  HMR: false
+  HMR: false,
+  baseUrl: '/psppi'
 });
 
 module.exports = function(env) {
   return webpackMerge(commonConfig({env: ENV}), {
 
+    metadata: METADATA,
     /**
      * Switch loaders to debug mode.
      *
@@ -208,7 +210,7 @@ module.exports = function(env) {
     tslint: {
       emitErrors: true,
       failOnHint: true,
-      resourcePath: 'src'
+      resourcePath: 'client'
     },
 
     /**

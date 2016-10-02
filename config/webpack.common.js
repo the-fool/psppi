@@ -12,6 +12,7 @@ const helpers = require('./helpers');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlPrefix = require('html-webpack-prefix-plugin');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const HtmlElementsPlugin = require('./html-elements-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
@@ -268,8 +269,11 @@ module.exports = function(options) {
        */
       new HtmlWebpackPlugin({
         template: 'client/index.html',
-        chunksSortMode: 'dependency'
+        chunksSortMode: 'dependency',
+        prefix: '/static/'
       }),
+      new HtmlPrefix(),
+      
 
       /*
        * Plugin: HtmlHeadConfigPlugin

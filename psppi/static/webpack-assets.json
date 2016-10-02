@@ -1,0 +1,14 @@
+{
+  "main": {
+    "js": "main.cc26c654342824affe43.bundle.js"
+  },
+  "vendor": {
+    "js": "vendor.f5f19121d27537439cfb.bundle.js"
+  },
+  "bs": {
+    "js": "bs.b8bc17ae96f4df13f523.bundle.js"
+  },
+  "polyfills": {
+    "js": "polyfills.7412d230513f926ff3f9.bundle.js"
+  }
+}
