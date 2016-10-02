@@ -38,7 +38,7 @@ const APP_PROVIDERS = [
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
-    {provide: 'ApiUrl', useValue: 'http://127.0.0.1:8000/api/v1'},
+    {provide: 'ApiUrl', useValue: API_URL},
   ]
 })
 export class AppModule {}
