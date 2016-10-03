@@ -6,13 +6,11 @@ import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } fro
   encapsulation: ViewEncapsulation.None,
   template: `
   <div>
-  <ng-select [allowClear]="true"
-             [active]="init"
-             [items]="questions"
-             (selected)="onSelectQuestion.emit($event)"
-             placeholder="No question selected"></ng-select>
   <h3>{{selected?.text}}</h3>
-  <button class="btn btn-primary" (click)="qModal.show()">Large modal</button>
+  <button id="open-question-modal" class="btn btn-primary pull-md-right" 
+    (click)="qModal.show()">
+    Select a different question
+  </button>
     
   <div bsModal #qModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" 
        aria-labelledby="selectQuestionModal" aria-hidden="true">
@@ -31,7 +29,8 @@ import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } fro
               <button type="button" 
                 class="list-group-item list-group-item-action"
                 [ngClass]="{'active': q.id === selected.id}" 
-                *ngFor="let q of group.questions">
+                *ngFor="let q of group.questions"
+                (click)="onSelectQuestion.emit(q); qModal.hide()">
               {{q.text}}
               </button>
             </div>
