@@ -10,7 +10,10 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
     template: `
     <div>
         <div id="question-selector-wrapper">
-            <question-selector [questions]="questionOptions$ | async" [init]="initSelectedQuestion$ | async"
+            <question-selector [questions]="questionOptions$ | async"
+            [groupedQuestions]="groupedQuestions$ | async" 
+            [selected]="questionData$ | async"
+            [init]="initSelectedQuestion$ | async"
             (onSelectQuestion)="onSelectQuestion($event)">
             </question-selector>
         </div>
@@ -42,14 +45,22 @@ export class ExploreComponent {
     private selectedYear$ = new BehaviorSubject<string>('all');
     private initSelectedQuestion$: Observable<IQuestion[]>;
     private questionOptions$: Observable<SelectChildrenItem[]>;
+    private groupedQuestions$: Observable<{group: string, questions: IQuestion[]}[]>;
     constructor(
         private store: Store<AppState>,
         private router: Router,
         private questionService: QuestionService
     ) {
         this.questionData$ = store.select(s => s.data);
+
         this.demographyDict$ = store.select(s => s.demography)
-                                    .map(reduce((a, i) => set(lensProp(prop<string>('code', i)), i, a), {}));
+                .map(reduce((a, i) => set(lensProp(prop<string>('code', i)), i, a), {}));
+
+        this.groupedQuestions$ = store.select(s => s.questions).map(qs => {
+            const parent = (grp: [string, IQuestion[]]) =>
+                ({group: grp[0], questions: grp[1]});
+            return map(parent, toPairs(qs));
+        });
         // for some reason, ng2-select wants an array
         this.initSelectedQuestion$ = this.questionData$.map(Array).take(1);
         this.questionOptions$ = store.select(s => s.questions).map(qs => {
