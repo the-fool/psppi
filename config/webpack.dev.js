@@ -68,7 +68,7 @@ module.exports = function(options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#output-path
        */
-      path: helpers.root('psppi/static'),
+      path: helpers.root('dist'),
 
       /**
        * Specifies the name of each output file on disk.
@@ -159,7 +159,7 @@ module.exports = function(options) {
         aggregateTimeout: 300,
         poll: 1000
       },
-      outputPath: helpers.root('psppi/static')
+      outputPath: helpers.root('dist')
     },
 
     /*

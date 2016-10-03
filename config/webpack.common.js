@@ -270,7 +270,7 @@ module.exports = function(options) {
       new HtmlWebpackPlugin({
         template: 'client/index.html',
         chunksSortMode: 'dependency',
-        prefix: '/static/'
+        // prefix: '/static/'
       }),
       new HtmlPrefix(),
       

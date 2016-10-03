@@ -27,6 +27,8 @@ services:
     build: ./compose/nginx
     depends_on:
       - django
+    volumes:
+      - ./dist:/usr/share/nginx/html
 
     ports:
       - "0.0.0.0:80:80"
