@@ -29,3 +29,12 @@ ul.dropdown-menu.ui-select-choices {
         }
     }
 }
+
+.modal-body {
+    max-height: 700px; /* TODO: responsive */
+    overflow: auto;
+
+    .question-group-heading {
+        margin: 30px 0px 10px;
+    }
+}

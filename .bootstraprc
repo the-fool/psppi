@@ -90,7 +90,7 @@ styles:
   close: true
 
   # Components w/ JavaScript
-  modal: false
+  modal: true
   tooltip: true
   popover: true
   carousel: false

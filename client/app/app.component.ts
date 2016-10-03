@@ -17,4 +17,9 @@ import { Component, ViewEncapsulation, ViewContainerRef } from '@angular/core';
     <router-outlet></router-outlet>
   `
 })
-export class App {}
+export class App {
+  private viewContainerRef: ViewContainerRef;
+  constructor(viewContainerRef: ViewContainerRef) {
+    this.viewContainerRef = viewContainerRef;
+  }
+}
