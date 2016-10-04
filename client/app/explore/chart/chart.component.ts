@@ -22,6 +22,17 @@ interface ResponseOpt {
   label: string;
 }
 
+const COLORS = [
+  'rgb(96,143,61)',
+  'rgb(219,20,0)',
+  'rgb(253,116,0)',
+  'rgb(42,188,153)',
+  'rgb(0,67,88)',
+  'rgb(251,223,62)',
+  'rgb(151,233,213)'
+];
+
+const colorFunc = (d, i) => (d.data && d.data.color) || COLORS[i % COLORS.length];
 
 @Component({
   selector: 'chart',
@@ -52,6 +63,7 @@ export class ChartComponent implements OnChanges {
     chart: {
       type: 'lineChart',
       height: 450,
+      color: colorFunc,
       margin: {
         top: 20,
         right: 20,
@@ -76,6 +88,7 @@ export class ChartComponent implements OnChanges {
     chart: {
       type: 'multiBarChart',
       height: 500,
+      color: colorFunc,
       margin: {
         top: 20,
         right: 20,
