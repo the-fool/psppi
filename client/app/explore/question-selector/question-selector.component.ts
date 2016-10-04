@@ -6,11 +6,15 @@ import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } fro
   encapsulation: ViewEncapsulation.None,
   template: `
   <div>
-  <h3>{{selected?.text}}</h3>
-  <button id="open-question-modal" class="btn btn-primary pull-md-right" 
-    (click)="qModal.show()">
-    Select a different question
-  </button>
+  <div id="selected-question" class="card card-block"> 
+    <h4 class="card-title">{{selected?.group | uppercase}}</h4>
+    <p class="card-text">{{selected?.text}}</p>
+    <a id="open-question-modal" class="card-link pull-md-right" 
+      (click)="qModal.show()">
+      Select a different question . . . 
+    </a>
+  </div>
+
     
   <div bsModal #qModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" 
        aria-labelledby="selectQuestionModal" aria-hidden="true">

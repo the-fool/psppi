@@ -29,7 +29,15 @@ ul.dropdown-menu.ui-select-choices {
         }
     }
 }
+@font-face {
+    font-family: "SeruffBold";
+    src: url("assets/css/SeruffBold.woff") format("woff");
+}
 
+@font-face {
+    font-family: "SeruffLight";
+    src: url("assets/css/SeruffLight.woff") format("woff");
+}
 .modal-body {
     max-height: 700px; /* TODO: responsive */
     overflow: auto;
@@ -37,4 +45,15 @@ ul.dropdown-menu.ui-select-choices {
     .question-group-heading {
         margin: 30px 0px 10px;
     }
+}
+
+#selected-question {
+    background: white;
+    .card-title {
+        font-family: SeruffBold;
+    }
+
+   #open-question-modal {
+       cursor: pointer;
+   }
 }

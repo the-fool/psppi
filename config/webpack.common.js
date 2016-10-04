@@ -160,6 +160,8 @@ module.exports = function(options) {
         },
         // all css required in client/app files will be merged in js files
         { test: /\.scss$/, exclude: helpers.root('client', 'style'), loader: 'raw!postcss!sass' },
+        // fonts, etc.
+        {test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)(\?[a-z0-9=&.]+)?$/, loader: 'file?name=fonts/[name].[hash].[ext]?'},
         /*
          * to string and css loader support for *.css files
          * Returns file content as string
