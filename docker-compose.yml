@@ -12,6 +12,14 @@ services:
       - postgres_backup:/backups
     env_file: .env
 
+  client:
+    build:
+      context: .
+      dockerfile: ./compose/client/Dockerfile    
+    volumes:
+      - .:/app
+    env_file: .env
+
   django:
     build:
       context: .

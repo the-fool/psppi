@@ -21,6 +21,7 @@ const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
 /*
  * Webpack Constants
  */
+const STATIC_ASSET_PREFIX = process.env.STATIC_ASSET_PREFIX || '';
 const HMR = helpers.hasProcessFlag('hot');
 const METADATA = {
   title: 'PSPPI',
@@ -261,6 +262,7 @@ module.exports = function(options) {
         to: 'assets'
       }]),
 
+
       /*
        * Plugin: HtmlWebpackPlugin
        * Description: Simplifies creation of HTML files to serve your webpack bundles.
@@ -272,7 +274,8 @@ module.exports = function(options) {
       new HtmlWebpackPlugin({
         template: 'client/index.html',
         chunksSortMode: 'dependency',
-        // prefix: '/static/'
+        prefix: STATIC_ASSET_PREFIX,
+        filename: 'psppi.html'
       }),
       new HtmlPrefix(),
       

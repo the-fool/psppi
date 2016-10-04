@@ -17,6 +17,11 @@ const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
 
+
+function stringifyEnv(key, defaultValue) {
+  return process.env[key] ? JSON.stringify(process.env[key]) :
+    defaultValue ? JSON.stringify(defaultValue) : JSON.stringify('');
+}
 /**
  * Webpack Constants
  */
@@ -30,6 +35,13 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   HMR: false,
   baseUrl: '/psppi'
 });
+
+/**
+ * Define'd vals
+ */
+const BASE_URL = stringifyEnv('BASE_URL', '/');
+const DJANGO_API_URL = stringifyEnv('DJANG_API_URL', 'http://127.0.0.1');
+
 
 module.exports = function(env) {
   return webpackMerge(commonConfig({env: ENV}), {
