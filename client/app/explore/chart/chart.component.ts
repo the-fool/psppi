@@ -14,7 +14,7 @@ interface BarData {
 
 interface Datum {
   label: string;
-  value: number;
+  y: number;
 }
 
 interface ResponseOpt {
