@@ -1,6 +1,12 @@
 #chart-wrapper {
     padding: 15px;
     margin: 20px;
+
+    .nv-series {
+        .nv-legend-text {
+            font: normal 14px Lato;
+        }
+    }
     .nv-groups {
         .nv-group {
             stroke-width: 5px !important;

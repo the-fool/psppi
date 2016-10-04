@@ -58,6 +58,9 @@ export class ChartComponent implements OnChanges {
         bottom: 40,
         left: 55
       },
+      legend: {
+        width: 700
+      },
       x: prop('x'),
       y: prop('y'),
       useInteractiveGuideline: true,
@@ -221,7 +224,7 @@ export class ChartComponent implements OnChanges {
   }
 
   _setForceYRange(maximum: number, options: any) {
-      const forceYRange = [0, maximum + ((1 - maximum) ** 2.5)];
+      const forceYRange = [0, min(1, Math.round((maximum + .1) * 10 )/ 10)];
       return assocPath(['chart', 'forceY'], forceYRange, options);
   }
 
