@@ -202,37 +202,15 @@ export class ChartComponent implements OnChanges {
       } else {
         // Individual year, no demog
         this.options = this.pieOptions;
-        this.data = [
-          {
-            key: "One",
-            y: 5
-          },
-          {
-            key: "Two",
-            y: 2
-          },
-          {
-            key: "Three",
-            y: 9
-          },
-          {
-            key: "Four",
-            y: 7
-          },
-          {
-            key: "Five",
-            y: 4
-          },
-          {
-            key: "Six",
-            y: 3
-          },
-          {
-            key: "Seven",
-            y: .5
-          }
-        ];
-
+        const yearData = this.questionData.responses[this.year];
+        const normalizer = reduce<number, number>(add, 0, map<IResponse, number>(prop('count'), yearData.values));
+        this.data = map(
+          value => ({
+            key: this.questionData.values[value.value],
+            y: value.count / normalizer
+          }),
+          yearData.values
+        );
       }
     }
   }
