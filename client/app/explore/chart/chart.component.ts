@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import {
-  add, always, compose, find, filter, groupBy, ifElse, isNil, keys, lensProp, map,
-  mapObjIndexed, not, prop, propEq, reduce, set, toPairs, values, xprod
+  add, always, assocPath, compose, find, filter, groupBy, ifElse, isNil, keys, lensProp, map,
+  mapObjIndexed, max, merge, min, not, prop, propEq, reduce, set, toPairs, values, xprod
 } from 'ramda';
 declare const d3: any;
 const nvd3 = require('nvd3/build/nv.d3.css');
@@ -29,7 +29,7 @@ interface ResponseOpt {
   styles: [nvd3, style],
 
   template: `
-    <div>
+    <div id="chart-wrapper" class="card">
     <nvd3 [options]="options" [data]="data"></nvd3>
     <div class="btn-grp">
       <label *ngFor="let r of responseOpts" class="btn btn-primary" [(ngModel)]="selectedSpecificResponse"
@@ -58,7 +58,6 @@ export class ChartComponent implements OnChanges {
         bottom: 40,
         left: 55
       },
-      forceY: [0, 1],
       x: prop('x'),
       y: prop('y'),
       useInteractiveGuideline: true,
@@ -103,16 +102,13 @@ export class ChartComponent implements OnChanges {
   private pieOptions = {
     chart: {
       type: 'pieChart',
-      height: 700,
+      height: 500,
       donut: true,
+      donutRatio: 0.2,
       x: prop('key'),
       y: prop('y'),
       showLabels: true,
       duration: 500,
-      pie: {
-        startAngle: d => d.startAngle / 2 - Math.PI / 2,
-        endAngle: d => d.endAngle / 2 - Math.PI / 2
-      },
       legend: {
         margin: {
           top: 5,
@@ -167,16 +163,16 @@ export class ChartComponent implements OnChanges {
         )
       }),
       keys(seriesDict));
-      console.log(this.data);
+      const maximum = reduce((maximum1, series: {values: {y: number}[]}) => max(
+        maximum1,
+        reduce((maximum2, value) => max(maximum2, value.y), 0, series.values)), 0, this.data);
+      const forceYRange = [0, maximum + ((1 - maximum) ** 3)];
+      this.options = assocPath(['chart', 'forceY'], forceYRange, this.lineOptions);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     if (changes['year'] || changes['questionData']) {
       if (this.year === 'all') {
-        // set line chart scheme
-        this.options = this.lineOptions;
-
         // are we grouping by demog?
         if (this.questionData.demog === 'any') {
           // clear out responseOpt buttons
@@ -189,6 +185,7 @@ export class ChartComponent implements OnChanges {
           this.selectedSpecificResponse = this.responseOpts[0].key;
           this._constructLineData(this.selectedSpecificResponse);
         }
+
       } else if (this.questionData.demog !== 'any') {
         // Individual year, individual demog
         this.options = this.barOptions;

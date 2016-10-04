@@ -9,7 +9,7 @@ import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } fro
   <div id="selected-question" class="card card-block"> 
     <h4 class="card-title">{{selected?.group | uppercase}}</h4>
     <p class="card-text">{{selected?.text}}</p>
-    <a id="open-question-modal" class="card-link pull-md-right" 
+    <a id="open-question-modal" class="card-link " 
       (click)="qModal.show()">
       Select a different question . . . 
     </a>

@@ -1,34 +1,3 @@
-div.ui-select-match {
-    span.ui-select-toggle {
-        white-space: normal;
-        font-size: x-large;
-    }
-
-    i.dropdown-toggle {
-        position: absolute;
-        height: 10px;
-        font-size: larger;
-        top: 75%;
-        right: 10px;
-        margin-top: -2px; 
-    }
-}
-
-.dropdown-header {
-    font-size: larger;
-}
-
-ul.dropdown-menu.ui-select-choices {
-    max-height: 300px;
-
-    .dropdown-item {
-        div {
-            white-space: initial;
-            font-size: x-large;
-            margin: 10px 30px;
-        }
-    }
-}
 @font-face {
     font-family: "SeruffBold";
     src: url("assets/css/SeruffBold.woff") format("woff");
@@ -52,8 +21,16 @@ ul.dropdown-menu.ui-select-choices {
     .card-title {
         font-family: SeruffBold;
     }
+    .card-text {
+        font-size: 1.3rem;
+    }
 
    #open-question-modal {
        cursor: pointer;
    }
+}
+
+.question-group-heading,
+.modal-title {
+    font-family: SeruffBold;
 }
