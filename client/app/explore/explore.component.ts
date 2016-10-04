@@ -17,21 +17,19 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
             (onSelectQuestion)="onSelectQuestion($event)">
             </question-selector>
         </div>
-        <div id="abs-wrapper">
         <div class="row" id="viz-widgets">
             <div id="demog-selector">
                 <demography-selector [demographies]="demographyOptions$ | async"
                 (onSelectDemog)="onSelectDemog($event)">
                 </demography-selector>
             </div>
-            <div id="chart-wrapper">
+            <div id="chart-comp-wrapper">
                 <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async" [demogDict]="demographyDict$ | async"></chart>
             </div>
             <div id="year-selector">
                 <year-selector [years]="yearOptions$ | async" (onSelectYear)="onSelectYear($event)">
                 </year-selector>
             </div>
-        </div>
         </div>        
     </div>
     `,

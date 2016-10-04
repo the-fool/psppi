@@ -65,9 +65,7 @@ export class ChartComponent implements OnChanges {
         axisLabel: 'Year'
       },
       yAxis: {
-        axisLabel: 'Percentage',
         tickFormat: d3.format(',.0%'),
-        axisLabelDistance: -10
       },
     }
   };
@@ -83,18 +81,17 @@ export class ChartComponent implements OnChanges {
       },
       forceY: [0, 1],
       x: prop('label'),
-      y: prop('value'),
+      y: prop('y'),
       showValues: true,
       tooltip: {
         valueFormatter: d3.format(',.1%')
       },
       duration: 500,
       xAxis: {
-        axisLabel: 'X Axis'
+        axisLabel: 'Year'
       },
       yAxis: {
-        axisLabel: 'Y Axis',
-        axisLabelDistance: -10
+        tickFormat: d3.format(',.0%'),
       }
     }
   };
@@ -163,16 +160,15 @@ export class ChartComponent implements OnChanges {
         )
       }),
       keys(seriesDict));
-      const maximum = reduce((maximum1, series: {values: {y: number}[]}) => max(
-        maximum1,
-        reduce((maximum2, value) => max(maximum2, value.y), 0, series.values)), 0, this.data);
-      const forceYRange = [0, maximum + ((1 - maximum) ** 3)];
-      this.options = assocPath(['chart', 'forceY'], forceYRange, this.lineOptions);
+
+      const maximum = this._getMaxY(this.data);
+      this.options = this._setForceYRange(maximum, this.lineOptions);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['year'] || changes['questionData']) {
       if (this.year === 'all') {
+        // line chart
         // are we grouping by demog?
         if (this.questionData.demog === 'any') {
           // clear out responseOpt buttons
@@ -187,8 +183,8 @@ export class ChartComponent implements OnChanges {
         }
 
       } else if (this.questionData.demog !== 'any') {
+        // Bar chart
         // Individual year, individual demog
-        this.options = this.barOptions;
         const valuesByDemog = this._getValuesGroupedByDemog(this.questionData.responses[this.year].values);
         const demogDict = this._getDemogDict(this.questionData);
         this.data = map(
@@ -199,6 +195,9 @@ export class ChartComponent implements OnChanges {
               this.computeBarData(valuesByDemog[demog])
             )
           }), keys(valuesByDemog));
+           const maximum = this._getMaxY(this.data);
+           this.options = this._setForceYRange(maximum, this.barOptions);
+
       } else {
         // Individual year, no demog
         this.options = this.pieOptions;
@@ -213,6 +212,17 @@ export class ChartComponent implements OnChanges {
         );
       }
     }
+  }
+
+  _getMaxY(data: {values: {y: number}[]}[]) {
+    return reduce((maximum1, series: {values: {y: number}[]}) => max(
+            maximum1,
+            reduce((maximum2, value) => max(maximum2, value.y), 0, series.values)), 0, data);
+  }
+
+  _setForceYRange(maximum: number, options: any) {
+      const forceYRange = [0, maximum + ((1 - maximum) ** 2.5)];
+      return assocPath(['chart', 'forceY'], forceYRange, options);
   }
 
   _getValuesGroupedByDemog(responses: IResponse[]) {
@@ -237,9 +247,9 @@ export class ChartComponent implements OnChanges {
     const denom = this._getDenominator(data);
     const datumToBar = (d: { count: number, demog: string, value: string }) => {
       const label = d.value;
-      const value = d.count / denom;
+      const y = d.count / denom;
       const demog = d.demog;
-      return { label, value };
+      return { label, y };
     };
     return map(datumToBar, data);
   }
