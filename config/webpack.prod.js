@@ -25,6 +25,7 @@ function stringifyEnv(key, defaultValue) {
 /**
  * Webpack Constants
  */
+const BASE_URL = stringifyEnv('BASE_URL', '/');
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
@@ -33,14 +34,14 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   port: PORT,
   ENV: ENV,
   HMR: false,
-  baseUrl: '/psppi'
+  baseUrl: BASE_URL
 });
 
 /**
  * Define'd vals
  */
-const BASE_URL = stringifyEnv('BASE_URL', '/');
-const DJANGO_API_URL = stringifyEnv('DJANG_API_URL', 'http://127.0.0.1');
+
+const DJANGO_API_URL = stringifyEnv('DJANG_API_URL', 'http://127.0.0.1/api/v1');
 
 
 module.exports = function(env) {
