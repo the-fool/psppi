@@ -38,7 +38,7 @@ const APP_PROVIDERS = [
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
-    {provide: 'ApiUrl', useValue: API_URL},
+    {provide: 'ApiUrl', useValue: DJANGO_API_URL},
   ]
 })
 export class AppModule {}
