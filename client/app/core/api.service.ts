@@ -26,12 +26,13 @@ export class ApiService {
       headers: headers,
       withCredentials: true,
     }).merge(options);
+    
     let request;
     switch (method.toUpperCase()) {
       case 'GET':
         return this.http[method.toLowerCase()](
           `${this.apiUrl}/${url}`,
-          options).map(res => res.json())
+          requestOptions).map(res => res.json())
           .toPromise().catch(this.handleError);
       case 'DELETE':
         return request.toPromise().catch(this.handleError);
@@ -40,7 +41,7 @@ export class ApiService {
         return this.http[method.toLowerCase()](
           `${this.apiUrl}/${url}`,
           data,
-          options)
+          requestOptions)
           .map(res => res.json())
           .toPromise()
           .catch(this.handleError);
