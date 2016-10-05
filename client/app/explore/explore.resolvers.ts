@@ -35,7 +35,7 @@ export class InitialData implements Resolve<any> {
 export class QuestionData implements Resolve<any> {
     constructor(
         private api: ApiService,
-                private questionService: QuestionService,
+        private questionService: QuestionService,
         private router: Router,
         private store: Store<AppState>,
     ) {}
