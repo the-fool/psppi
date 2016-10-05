@@ -14,6 +14,7 @@ api_patterns = [
 
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
     url(r'^api/v1/', include(api_patterns)),
     url(r'^psppi', TemplateView.as_view(template_name='psppi.html')),
     url(settings.ADMIN_URL, include(admin.site.urls)),
