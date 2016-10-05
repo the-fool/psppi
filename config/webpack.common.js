@@ -274,8 +274,8 @@ module.exports = function(options) {
       new HtmlWebpackPlugin({
         template: 'client/index.html',
         chunksSortMode: 'dependency',
-        prefix: STATIC_ASSET_PREFIX,
-        filename: 'psppi.html'
+        prefix: isProd ? STATIC_ASSET_PREFIX : '',
+        filename: isProd ? 'psppi.html' : 'index.html'
       }),
       new HtmlPrefix(),
       

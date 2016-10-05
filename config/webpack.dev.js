@@ -112,7 +112,7 @@ module.exports = function(options) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
-        'API_URL': JSON.stringify('http://127.0.0.1:8000/api/v1'),
+        'DJANGO_API_URL': JSON.stringify('http://127.0.0.1:8000/api/v1'),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
