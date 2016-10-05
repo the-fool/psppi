@@ -40,7 +40,7 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
  * Define'd vals
  */
 const BASE_URL = stringifyEnv('BASE_URL', '/');
-const DJANGO_API_URL = stringifyEnv('DJANG_API_URL', 'http://127.0.0.1');
+const DJANGO_API_URL = stringifyEnv('DJANGO_API_URL', 'http://127.0.0.1/api/v1');
 
 
 module.exports = function(env) {
