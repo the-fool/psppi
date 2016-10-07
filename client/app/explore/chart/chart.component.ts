@@ -140,27 +140,12 @@ export class ChartComponent implements OnChanges {
     // Group data series by response values, or response demography
     // if there is a specific response to filter by, then we group data by demog
     // else, we show all response values
-    let seriesDict;
-    let filterPredicate; // how to filter response data
-    let seriesKey;
-    if (isNil(specificResponse)) {
-      seriesDict = valueDict;
-      filterPredicate = always(true); // 'any' demog requires no filtering
-      seriesKey = 'value';
-    } else {
-      seriesDict = demogDict;
-      filterPredicate = propEq('value', specificResponse.toString());
-      seriesKey = 'demog';
-    }
-    // valuesByYear :: { [year: number]: IResponse[] }    
-    const valuesByYearByGrouping = mapObjIndexed(
-      (year, key, responses) => {
-        const allValues = responses[key].values;
-        const possibleValues = filter<IResponse>(filterPredicate, allValues);
-        return <{[key: string]: IResponse}>reduce((acc, v) => set(lensProp(prop<string>(seriesKey, v)), v, acc), {}, possibleValues);
-      },
-      this.questionData.responses
-    );
+    const seriesDict = isNil(specificResponse) ? valueDict : demogDict;
+    const valuesByYearByGrouping = this._getValuesByYearByGrouping(this.questionData, specificResponse);
+    // Is the denominator a function of all response values, or a response values by a particular demog?
+    const yValueDenomDomainComputer = isNil(specificResponse) ?
+      (year) => values(valuesByYearByGrouping[year]) :
+      (year, demogKey) => filter(propEq('demog', +demogKey))(this.questionData.responses[year].values);
 
     this.data = map(
       k => ({
@@ -168,9 +153,7 @@ export class ChartComponent implements OnChanges {
         values: map(
           year => ({
             x: +year,
-            y: this.computeLineDatum(
-              valuesByYearByGrouping[year][k],
-              values(valuesByYearByGrouping[year]))
+            y: this.computeLineDatum(valuesByYearByGrouping[year][k], yValueDenomDomainComputer(year, k)),
           }),
           keys(valuesByYearByGrouping)
         )
@@ -179,6 +162,34 @@ export class ChartComponent implements OnChanges {
 
       const maximum = this._getMaxY(this.data);
       this.options = this._setForceYRange(maximum, this.lineOptions);
+  }
+
+  computeLineDatum(datum: any, data: IResponse[]) {
+    if (!data || !datum) return 0;
+    const denom = this._getDenominator(data);
+    return datum.count / denom;
+  }
+
+
+  _getValuesByYearByGrouping(data: IQuestionData, specificResponseValue?: number): {[year: number]: {[key: string]: IResponse}} {
+    const _responses = data.responses;
+    let filterPredicate; // how to filter response data
+    let seriesKey;
+    if (isNil(specificResponseValue)) {
+      filterPredicate = always(true); // 'any' demog requires no filtering
+      seriesKey = 'value';
+    } else {
+      filterPredicate = propEq('value', specificResponseValue.toString());
+      seriesKey = 'demog';
+    }
+    return mapObjIndexed(
+      (year, key, responses) => {
+        const allValues = responses[key].values;
+        const possibleValues = filter<IResponse>(filterPredicate, allValues);
+        return <{[key: string]: IResponse}>reduce((acc, v) => set(lensProp(prop<string>(seriesKey, v)), v, acc), {}, possibleValues);
+      },
+      _responses
+    );
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -251,12 +262,6 @@ export class ChartComponent implements OnChanges {
 
   _getDenominator(data: IResponse[]) {
     return reduce<number, number>(add, 0, map<IResponse, number>(ifElse(prop('count'), prop('count'), always(0)), data));
-  }
-
-  computeLineDatum(datum: any, data: IResponse[]) {
-    if (!data) return 0;
-    const denom = this._getDenominator(data);
-    return datum ? datum.count / denom : 0;
   }
 
   computeBarData(data: IResponse[]): Datum[] {
