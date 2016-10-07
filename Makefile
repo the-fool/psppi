@@ -6,6 +6,6 @@ datasets:
 
 build:
 	docker-compose down
-	docker-compose -f dev.yml run client npm build:prod
+	docker-compose run client npm run build:prod
 	docker rmi aa_django
 	docker-compose build
