@@ -116,8 +116,9 @@ export class ChartComponent implements OnChanges {
     chart: {
       type: 'pieChart',
       height: 500,
-      donut: true,
-      donutRatio: 0.2,
+      donut: false,
+      color: colorFunc,
+      //donutRatio: 0.2,
       x: prop('key'),
       y: prop('y'),
       showLabels: true,
