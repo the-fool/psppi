@@ -213,7 +213,7 @@ export class ChartComponent implements OnChanges {
         // Bar chart
         // Individual year, individual demog
         this.responseOpts = [];
-        
+
         const valuesByDemog = this._getValuesGroupedByDemog(this.questionData.responses[this.year].values);
         const demogDict = this._getDemogDict(this.questionData);
         this.data = map(
@@ -251,7 +251,7 @@ export class ChartComponent implements OnChanges {
   }
 
   _setForceYRange(maximum: number, options: any) {
-      const forceYRange = [0, min(1, Math.round((maximum + .1) * 10 )/ 10)];
+      const forceYRange = [0, min(1, Math.round((maximum + .1) * 10 ) / 10)];
       return assocPath(['chart', 'forceY'], forceYRange, options);
   }
 
