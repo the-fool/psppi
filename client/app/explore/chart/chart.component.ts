@@ -212,6 +212,8 @@ export class ChartComponent implements OnChanges {
       } else if (this.questionData.demog !== 'any') {
         // Bar chart
         // Individual year, individual demog
+        this.responseOpts = [];
+        
         const valuesByDemog = this._getValuesGroupedByDemog(this.questionData.responses[this.year].values);
         const demogDict = this._getDemogDict(this.questionData);
         this.data = map(
@@ -227,6 +229,7 @@ export class ChartComponent implements OnChanges {
 
       } else {
         // Individual year, no demog
+        this.responseOpts = [];
         this.options = this.pieOptions;
         const yearData = this.questionData.responses[this.year];
         const normalizer = reduce<number, number>(add, 0, map<IResponse, number>(prop('count'), yearData.values));

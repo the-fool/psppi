@@ -7,3 +7,12 @@ html, body{
 span.active {
   background-color: gray;
 }
+
+.btn-primary {
+  background-color: rgb(65,174,189);
+  border-color: rgb(0,40,78);
+}
+.btn-primary:active, .btn-primary.active, .open > .btn-primary.dropdown-toggle {
+  background-color: rgb(0,67,88);
+  border-color: rgb(0,40,78);
+}
