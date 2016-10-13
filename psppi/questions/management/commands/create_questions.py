@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from psppi.questions.models import Question, Group
 import pandas as pd
 
+
 class Command(BaseCommand):
     help = "Pulls question information"
 
@@ -14,12 +15,15 @@ class Command(BaseCommand):
                 values = {}
                 for i in range(10):
                     j = str(i)
-                    if not pd.isnull(row[j]): values[j] = row[j]
+                    if not pd.isnull(row[j]):
+                        values[j] = row[j]
                 print(values)
                 questions.append(
                     Question(
                         code=row['code'],
                         text=row['text'],
+                        short=row['short'],
+                        notes=row['notes'],
                         group=Group.objects.filter(name=row['group']).first(),
                         values=values
                     )
