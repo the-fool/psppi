@@ -12,5 +12,6 @@ class Group(models.Model):
 class Question(models.Model):
     code = models.CharField(unique=True, max_length=128)
     text = models.CharField(default='', max_length=512)
+    short = models.CharField(default='', max_length=512)
     group = models.ForeignKey(Group, null=True)
     values = HStoreField(default={})
