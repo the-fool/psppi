@@ -7,7 +7,7 @@ import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } fro
   template: `
   <div>
   <div id="selected-question" class="card card-block"> 
-    <h4 class="card-title">{{selected?.group | uppercase}}</h4>
+    <h4 class="card-title"><span id="group-heading">{{selected?.group | uppercase}}</span> | {{selected?.short}}</h4>
     <p class="card-text">{{selected?.text}}</p>
     <a id="open-question-modal" class="card-link " 
       (click)="qModal.show()">
@@ -24,11 +24,11 @@ import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } fro
           <button type="button" class="close" (click)="qModal.hide()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title">Please select a question . . .</h4>
+          <h3 class="modal-title">Please select a question . . .</h3>
         </div>
         <div class="modal-body">
           <squeezebox [multiple]="false">
-            <sb-item *ngFor="let group of groupedQuestions">
+            <sb-item *ngFor="let group of groupedQuestions" [ngClass]="{'selected': group.group == selected.group}">
             <sb-item-head>{{group.group | uppercase}}</sb-item-head>
             <sb-item-body>
               <div class="list-group">
@@ -56,5 +56,4 @@ export class QuestionSelectorComponent {
   @Input() questions: SelectChildrenItem[];
   @Input() init: IQuestion;
   @Output() onSelectQuestion = new EventEmitter<{ id: number | string, text: string }>();
-
 }

@@ -7,6 +7,10 @@
     font-family: "SeruffLight";
     src: url("assets/css/SeruffLight.woff") format("woff");
 }
+
+#group-heading {
+    color: #246f79;
+}
 .question-group-heading,
 .modal-title {
     font-family: SeruffBold;
@@ -33,7 +37,7 @@
         font-family: SeruffBold;
     }
     .card-text {
-        font-size: 1.3rem;
+        font-size: 1rem;
     }
 
    #open-question-modal {

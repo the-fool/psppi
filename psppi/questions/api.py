@@ -3,7 +3,7 @@ from django.db.models.expressions import RawSQL
 from rest_framework import generics
 from rest_framework.response import Response as ApiResponse
 from .models import Question
-from psppi.responses.models import AvailableDemographyByQuestion, Demography, Response as ResponseModel
+from psppi.responses.models import AvailableDemographyByQuestion, Response as ResponseModel
 from .serializers import QuestionSerializer
 from collections import defaultdict
 
@@ -20,7 +20,7 @@ class QuestionListView(generics.ListAPIView):
         questions = QuestionSerializer(queryset, many=True).data
         grouped_questions = defaultdict(list)
         for q in questions:
-            group = q.pop('group')
+            group = q['group']
             grouped_questions[group].append(q)
         return ApiResponse(grouped_questions)
 

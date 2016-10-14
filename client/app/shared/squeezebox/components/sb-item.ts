@@ -1,4 +1,4 @@
-import { Component, ContentChild, Input, Inject, forwardRef, ViewEncapsulation } from '@angular/core';
+import { Component, ContentChild, Input, Inject, forwardRef, ViewEncapsulation, OnChanges } from '@angular/core';
 import { SBItemBody } from './sb-item-body';
 import { SqueezeBox } from './squeezebox';
 
@@ -12,7 +12,7 @@ import { SqueezeBox } from './squeezebox';
         </div>
     `
 })
-export class SBItem {
+export class SBItem   {
     @Input() public collapsed: boolean = true;
     @ContentChild(SBItemBody) body: SBItemBody;
     private squeezebox: SqueezeBox;
