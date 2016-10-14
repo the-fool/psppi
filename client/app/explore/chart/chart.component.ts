@@ -71,6 +71,7 @@ export class ChartComponent implements OnChanges {
         left: 55
       },
       legend: {
+        maxKeyLength: 50,
         width: 700
       },
       x: prop('x'),
@@ -95,6 +96,9 @@ export class ChartComponent implements OnChanges {
         bottom: 50,
         left: 55
       },
+      legend: {
+        maxKeyLength: 50,
+      },
       forceY: [0, 1],
       x: prop('label'),
       y: prop('y'),
@@ -104,7 +108,7 @@ export class ChartComponent implements OnChanges {
       },
       duration: 500,
       xAxis: {
-        axisLabel: 'Year'
+        axisLabel: 'Response'
       },
       yAxis: {
         tickFormat: d3.format(',.0%'),
@@ -123,7 +127,11 @@ export class ChartComponent implements OnChanges {
       y: prop('y'),
       showLabels: true,
       duration: 500,
+      tooltip: {
+        valueFormatter: d3.format(',.1%')
+      },
       legend: {
+        maxKeyLength: 50,
         margin: {
           top: 5,
           right: 140,
