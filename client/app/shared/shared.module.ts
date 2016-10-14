@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { ModalModule, TabsModule, ButtonsModule } from 'ng2-bootstrap/ng2-bootstrap';
 import { SelectModule } from './select/ng2-select';
+import { SqueezeBoxModule } from './squeezebox/squeezebox.module';
 import { nvD3 } from 'ng2-nvd3';
 import { ToPairsPipe } from './to-pairs.pipe';
 @NgModule({
@@ -21,7 +22,8 @@ import { ToPairsPipe } from './to-pairs.pipe';
         ButtonsModule,
         SelectModule,
         nvD3,
-        ToPairsPipe
+        ToPairsPipe,
+        SqueezeBoxModule
     ]
 })
 export default class SharedModule {}

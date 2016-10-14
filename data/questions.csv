@@ -1,4 +1,4 @@
-group,short,code,text,Notes,0,1,2,3,4,5,6,7,8,9,2009,2010,2011,2012,2013,2014SP,2014FA,2015,SP2016,FA2016
+group,short,code,text,notes,0,1,2,3,4,5,6,7,8,9,2009,2010,2011,2012,2013,2014SP,2014FA,2015,SP2016,FA2016
 outlook,Quality of Life,qlife,"Taking everything into account, would you say the overall quality of life in your area is excellent, good, average, not so good, or poor?",,,Excellent,Good,Average,Not so good,Poor,,,,DKNR,x,x,x,x,N/A,x,x,x,x,x
 outlook,Direction of Illinois,rwdiril,"What about the direction of the State of Illinois? Generally speaking, are things in Illinois going in the right direction, or are they off track and heading in the wrong direction?",,,Right direction,Wrong direction,Other/Don't know,,,,,,,x,x,x,x,x,x,x,x,x,x
 outlook,Direction of Local Area,rwdirlocal,"How are things going in your city or area of the state? In general, are things in your city or area going in the right direction, or in the wrong direction?",,,Right direction,Wrong direction,Other/Don't know,,,,,,,x,x,x,x,x,x,x,x,x,x

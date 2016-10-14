@@ -27,18 +27,22 @@ import { Component, EventEmitter, OnInit, Input, Output, ViewEncapsulation } fro
           <h4 class="modal-title">Please select a question . . .</h4>
         </div>
         <div class="modal-body">
-          <div *ngFor="let group of groupedQuestions">
-            <h3 class="question-group-heading">{{group.group | uppercase}}</h3>
-            <div class="list-group">
-              <button type="button" 
-                class="list-group-item list-group-item-action"
-                [ngClass]="{'active': q.id === selected.id}" 
-                *ngFor="let q of group.questions"
-                (click)="onSelectQuestion.emit(q); qModal.hide()">
-              {{q.text}}
-              </button>
-            </div>
-          </div>
+          <squeezebox [multiple]="false">
+            <sb-item *ngFor="let group of groupedQuestions">
+            <sb-item-head>{{group.group | uppercase}}</sb-item-head>
+            <sb-item-body>
+              <div class="list-group">
+                    <button type="button" 
+                      class="list-group-item list-group-item-action"
+                      [ngClass]="{'active': q.id === selected.id}" 
+                      *ngFor="let q of group.questions"
+                      (click)="onSelectQuestion.emit(q); qModal.hide()">
+                    {{q.short}}
+                    </button>
+              </div>
+            </sb-item-body>
+            </sb-item>
+          </squeezebox>
         </div>
       </div>
     </div>
