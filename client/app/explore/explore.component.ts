@@ -3,7 +3,8 @@ import { QuestionService } from '../core/question.service';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, prop, reduce, set, toPairs, keys } from 'ramda';
+import { compose, curry, equals, find, flatten, isNil, keys, lensProp,
+    map, merge, prepend, prop, reduce, set, toPairs, values } from 'ramda';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
                 </demography-selector>
             </div>
             <div id="chart-comp-wrapper">
+                <h1 id="year-label">{{year}}</h1>
                 <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async" [demogDict]="demographyDict$ | async"></chart>
             </div>
             <div id="year-selector">
@@ -36,11 +38,13 @@ import { compose, curry, equals, find, isNil, lensProp, map, merge, prepend, pro
     styleUrls: ['explore.style']
 })
 export class ExploreComponent {
+    private year = '';
+    private questions: IQuestion[];
+    private selectedYear$ = new BehaviorSubject<string>('all');
     private demographyOptions$: Observable<IDemographySelectOption[]>;
     private demographyDict$: Observable<{[code: string]: IDemography}>;
     private questionData$: Observable<IQuestionData>;
     private yearOptions$: Observable<IYearSelectOption[]>;
-    private selectedYear$ = new BehaviorSubject<string>('all');
     private initSelectedQuestion$: Observable<IQuestion[]>;
     private questionOptions$: Observable<SelectChildrenItem[]>;
     private groupedQuestions$: Observable<{group: string, questions: IQuestion[]}[]>;
@@ -50,10 +54,10 @@ export class ExploreComponent {
         private questionService: QuestionService
     ) {
         this.questionData$ = store.select(s => s.data);
-
         this.demographyDict$ = store.select(s => s.demography)
                 .map(reduce((a, i) => set(lensProp(prop<string>('code', i)), i, a), {}));
 
+        // Turn the dictionary-object into a list of grouped questions
         this.groupedQuestions$ = store.select(s => s.questions).map(qs => {
             const parent = (grp: [string, IQuestion[]]) =>
                 ({group: grp[0], questions: grp[1]});
@@ -74,8 +78,8 @@ export class ExploreComponent {
             this.selectedYear$,
             (question, selectedYear) => {
                 // TODO: get from api
-                const YEARS = ['all', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'];
                 const activeYears = keys(question.responses);
+                const YEARS = ['all', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'];
                 const constructYearOption = (value: string): IYearSelectOption => {
                     const active = (value === selectedYear);
                     const disabled = (value === 'all') ? false : isNil(find(equals(value), activeYears));
@@ -117,6 +121,7 @@ export class ExploreComponent {
     }
 
     onSelectYear(year: string) {
+        this.year = year === 'all' ? '' : year;
         this.selectedYear$.next(year);
     }
 

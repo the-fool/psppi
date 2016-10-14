@@ -88,7 +88,7 @@ export class ChartComponent implements OnChanges {
   private barOptions = {
     chart: {
       type: 'multiBarChart',
-      height: 500,
+      height: 600,
       color: colorFunc,
       margin: {
         top: 20,
@@ -99,6 +99,7 @@ export class ChartComponent implements OnChanges {
       legend: {
         maxKeyLength: 50,
       },
+      legendPosition: 'bottom',
       forceY: [0, 1],
       x: prop('label'),
       y: prop('y'),
@@ -127,6 +128,7 @@ export class ChartComponent implements OnChanges {
       y: prop('y'),
       showLabels: true,
       duration: 500,
+      legendPosition: 'right',
       tooltip: {
         valueFormatter: d3.format(',.1%')
       },
