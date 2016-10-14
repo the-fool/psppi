@@ -205,8 +205,8 @@ export class ChartComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['year'] || changes['questionData']) {
-      if (this.year === 'all') {
-        // line chart
+      if (this.year === 'all' && keys(this.questionData.responses).length > 1) {
+        // line chart if there are at least 2 years' worth of responses
         // are we grouping by demog?
         if (this.questionData.demog === 'any') {
           // clear out responseOpt buttons
@@ -240,6 +240,12 @@ export class ChartComponent implements OnChanges {
 
       } else {
         // Individual year, no demog
+
+        // If we are here b/c of the edge case where year is 'all' but there is only one year's worth of responses,
+        // then set year manually to be that single response's year
+        this.year = this.year === 'all' ? keys(this.questionData.responses)[0] : this.year;
+
+        // Remove response options from the DOM
         this.responseOpts = [];
         this.options = this.pieOptions;
         const yearData = this.questionData.responses[this.year];
