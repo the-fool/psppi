@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { compose, curry, equals, find, flatten, isNil, keys, lensProp,
-    map, merge, prepend, prop, reduce, set, toPairs, values } from 'ramda';
+    map, max, merge, prepend, prop, reduce, set, toPairs, toString, values } from 'ramda';
 
 
 @Component({
@@ -25,7 +25,6 @@ import { compose, curry, equals, find, flatten, isNil, keys, lensProp,
                 </demography-selector>
             </div>
             <div id="chart-comp-wrapper">
-                <h1 id="year-label">{{year}}</h1>
                 <chart [questionData]="questionData$ | async" [year]="selectedYear$ | async" [demogDict]="demographyDict$ | async"></chart>
             </div>
             <div id="year-selector">
@@ -40,7 +39,7 @@ import { compose, curry, equals, find, flatten, isNil, keys, lensProp,
 export class ExploreComponent {
     private year = '';
     private questions: IQuestion[];
-    private selectedYear$ = new BehaviorSubject<string>('all');
+    private selectedYear$ = new BehaviorSubject<number | string>('all');
     private demographyOptions$: Observable<IDemographySelectOption[]>;
     private demographyDict$: Observable<{[code: string]: IDemography}>;
     private questionData$: Observable<IQuestionData>;
@@ -54,6 +53,12 @@ export class ExploreComponent {
         private questionService: QuestionService
     ) {
         this.questionData$ = store.select(s => s.data);
+
+        // On new question, set the year to be the most recent results
+        this.questionData$.subscribe(q => {
+            const mostRecentYear = reduce((acc, i) => max(acc, i), 0, keys(q.responses));
+            this.selectedYear$.next(mostRecentYear);
+        });
         this.demographyDict$ = store.select(s => s.demography)
                 .map(reduce((a, i) => set(lensProp(prop<string>('code', i)), i, a), {}));
 

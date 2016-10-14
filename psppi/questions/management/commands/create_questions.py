@@ -18,12 +18,13 @@ class Command(BaseCommand):
                     if not pd.isnull(row[j]):
                         values[j] = row[j]
                 print(values)
+                notes = row['notes'] if row['notes'] else ''
                 questions.append(
                     Question(
                         code=row['code'],
                         text=row['text'],
                         short=row['short'],
-                        notes=row['notes'],
+                        notes=notes,
                         group=Group.objects.filter(name=row['group']).first(),
                         values=values
                     )
