@@ -12,7 +12,7 @@ import { compose, curry, equals, find, flatten, isNil, keys, lensProp,
     <div>
         <div id="header">
             <div id="banner-wrapper">
-                <h1 class="main">Simon Institute Poll: Illinois Statewide</h1>
+                <h1 class="main">Simon Poll: Illinois Statewide</h1>
                 <h4 class="secondary">Paul Simon Public Policy Institute</h4>
             </div>
             <div id="subtitle">
