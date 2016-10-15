@@ -108,9 +108,6 @@ export class ChartComponent implements OnChanges {
         valueFormatter: d3.format(',.1%')
       },
       duration: 500,
-      xAxis: {
-        axisLabel: 'Response'
-      },
       yAxis: {
         tickFormat: d3.format(',.0%'),
       }
@@ -128,7 +125,6 @@ export class ChartComponent implements OnChanges {
       y: prop('y'),
       showLabels: true,
       duration: 500,
-      legendPosition: 'right',
       tooltip: {
         valueFormatter: d3.format(',.1%')
       },

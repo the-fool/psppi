@@ -10,6 +10,24 @@ import { compose, curry, equals, find, flatten, isNil, keys, lensProp,
 @Component({
     template: `
     <div>
+        <div id="header">
+            <div id="banner-wrapper">
+                <h1 class="main">Simon Institute Poll: Illinois Statewide</h1>
+                <h4 class="secondary">Paul Simon Public Policy Institute</h4>
+            </div>
+            <div id="subtitle">
+                <p>
+                The Paul Simon Public Policy Institute’s annual statewide Simon Poll asks Illinois voters’ opinions on important 
+                current public policy topics, typically with a focus on state budget issues, political and electoral reform, 
+                politics, and social issues. The large-sample survey—usually at least 1,000 registered voters—contains 
+                representative samples from every region in Illinois, and dials cell phones as well as land lines
+                </p>
+            </div>
+        </div>
+
+        <br />
+        <br />
+
         <div id="question-selector-wrapper">
             <question-selector [questions]="questionOptions$ | async"
             [groupedQuestions]="groupedQuestions$ | async" 
@@ -31,7 +49,17 @@ import { compose, curry, equals, find, flatten, isNil, keys, lensProp,
                 <year-selector [years]="yearOptions$ | async" (onSelectYear)="onSelectYear($event)">
                 </year-selector>
             </div>
-        </div>        
+        </div>
+        <footer>
+        <p>
+        For more information about the methodology, look at press releases
+        <a target="_blank" href="http://paulsimoninstitute.siu.edu/opinion-polls/simon-institute-poll-2016.php">
+        here.</a>
+        To download the original raw data visit OpenSIUC. This visualizer does not contain all data 
+        collected in the Simon Institute Poll. Rather, it is an introduction to some key questions that 
+        have been asked over time and their demographic trends. 
+        </p>
+        </footer>        
     </div>
     `,
     styleUrls: ['explore.style']

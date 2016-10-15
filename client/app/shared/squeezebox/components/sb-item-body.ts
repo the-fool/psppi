@@ -20,7 +20,6 @@ export class SBItemBody {
         if (!collapsed) {
             this.renderer.setElementStyle(this.bodyEl.nativeElement, 'height', 'auto');
             height = this.bodyEl.nativeElement.offsetHeight + 'px';
-            console.log(height);
             this.renderer.setElementStyle(this.bodyEl.nativeElement, 'height', '0');
         }
         setTimeout(() => this.height = height, 20);
